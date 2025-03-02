@@ -1,3 +1,3 @@
-# Sistema de Controle de Acesso
+# Sistema de Controle de Estoque
 
 Este é um sistema de controle de estoque que permite que administradores / funcionários possam gerenciar o seu estoque
