@@ -1,0 +1,79 @@
+
+.container-forget-password {
+    width: 500px;
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(-250px);
+    transition: all 2s ease-in-out;
+}
+
+.container-forget-password.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.container-forget-password h1 {
+    text-align: center;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 300;
+    letter-spacing: 7px;
+}
+
+.container-forget-password p {
+    padding: 20px;
+    color: #fff;
+    text-align: center
+}
+
+.container-forget-password .input-field {
+    position: relative;
+    margin: 30px auto;
+    height: 50px;
+}
+
+.container-forget-password .input-field input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    font-size: 16px;
+    padding: 20px 45px;
+    border-radius: 45px;
+    color: #fff;
+}
+
+.container-forget-password .input-field input::placeholder {
+    color: #fff;
+}
+
+.icon {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #fff;
+}
+
+.container-forget-password button {
+    width: 100%;
+    height: 50px;
+    border: none;
+    border-radius: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+}
+
+.container-forget-password button:hover {
+    background-color: #042326;
+    color: #fff;
+}

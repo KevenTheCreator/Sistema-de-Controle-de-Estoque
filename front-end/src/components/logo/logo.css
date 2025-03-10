@@ -1,0 +1,12 @@
+.logo {
+    width: 200px;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(-250px);
+    transition: all 2s ease-in-out ;
+  }
+  
+  .logo.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
