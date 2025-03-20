@@ -1,21 +1,26 @@
-import './App.css';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/login/login';
-import Logo from './components/logo/logo';
-import EsqueceuSenha from './components/esqueceuSenha/esqueceuSenha';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import EsqueceuSenha from './components/EsqueceuSenha/esqueceuSenha';
+import Telainicial from './components/Tela-Inicial/tela-inicial';
+import AuthLayout from './components/AuthLayout/AuthLayout';
+import MainLayout from './components/MainLayout/MainLayout'
 
 function App() {
-  return (
-    <div className='App'>
-        <Logo/>
-        <Router>
-          <Routes>
-            <Route path='/' element= {<Login/>}></Route>
-            <Route path='/esqueceuSenha' element= {<EsqueceuSenha/>}></Route>
-          </Routes>
-        </Router>      
-    </div>
-  )
+  return (    
+    <Router>
+      <Routes>
+        <Route element={<AuthLayout />}>
+          <Route path="/" element={<Login />} />
+          <Route path="/esqueceuSenha" element={<EsqueceuSenha />} />
+        </Route>
+
+        <Route element={<MainLayout />}>
+          <Route path="/tela-inicial" element={<Telainicial />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
