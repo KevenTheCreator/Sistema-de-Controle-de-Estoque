@@ -23,6 +23,9 @@ public class TokenService {
     @Value("${auth.jwt.token.refresh-expiration}")
     private Integer refreshExpiration;
 
+    @Value("${auth.jwt.token.reset-expiration}")
+    private Integer resetExpiration;
+
     public String generateAcessToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
@@ -53,6 +56,32 @@ public class TokenService {
         }
     }
 
+    public String generateResetPasswordToken(User user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            return JWT.create()
+                    .withIssuer("warehouse-api")
+                    .withSubject(user.getEmail())
+                    .withExpiresAt(getResetPasswordTokenExpiration())
+                    .sign(algorithm);
+        } catch (JWTCreationException exception){
+            throw new JWTCreationException("Error while generating token", exception);
+        }
+    }
+
+    public String validateResetPasswordToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secretKey);
+            return JWT.require(algorithm)
+                    .withIssuer("warehouse-api")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception){
+            throw new JWTVerificationException("Error while validating token", exception);
+        }
+    }
+
     public String validateAcessToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secretKey);
@@ -79,6 +108,10 @@ public class TokenService {
         } catch (JWTVerificationException exception){
             throw new RuntimeException("Error while validating token", exception);
         }
+    }
+
+    private Instant getResetPasswordTokenExpiration() {
+        return LocalDateTime.now().plusHours(resetExpiration).toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant getAcessTokenExpiration(){
