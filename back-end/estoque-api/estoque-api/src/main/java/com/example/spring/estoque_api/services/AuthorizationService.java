@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -28,6 +29,9 @@ public class AuthorizationService implements UserDetailsService {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -69,7 +73,7 @@ public class AuthorizationService implements UserDetailsService {
     }
 
     private void sendPasswordResetEmail(String email, String token){
-        String resetLink = "http://localhost:8080/auth/reset-password?token=" + token;
+        String resetLink = "http://localhost:5173/redefinirSenha?token=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Redefinição de Senha");
@@ -81,7 +85,8 @@ public class AuthorizationService implements UserDetailsService {
         String email = tokenService.validateResetPasswordToken(data.token());
         User user = (User) userRepository.findByEmail(email);
         if (user != null){
-            user.setPassword(data.newPassword());
+            String encodedPassword = passwordEncoder.encode(data.newPassword());
+            user.setPassword(encodedPassword);
             userRepository.save(user);
         }
     }

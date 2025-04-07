@@ -67,3 +67,9 @@
     background-color: #042326;
     color: #fff;
 }
+
+p {
+    color: white;
+    margin-top: 30px;
+    text-align: center;
+}
