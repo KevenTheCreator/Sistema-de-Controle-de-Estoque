@@ -4,42 +4,7 @@ import "./tela-inicial.css";
 const Telainicial = () => {
   return (
     <div className="Home">
-         {/*Header*/}
-      <header className="header">
-        <div className="div-logo">
-          <img className="logo-header" src="/logo-principal.png" alt="" />
-        </div>
-        <nav className="navbar">
-          <ul className="navlist">
-            <li >
-              <img src="/inicio-icon.png" className="icones" alt="" />
-              <a href="#">Inicio</a>
-            </li>
-            <li>
-            <img src="/box-icon.png" className="icones" alt="" />
-              <a href="#">Produtos</a>
-            </li>
-            <li>
-            <img src="/people-icon.png" className="icones" alt="" />
-              <a href="#">Solicitantes</a>
-            </li>
-            <li>
-            <img src="/shipped-icon.png" className="icones" alt="" />
-              <a href="#">Entradas</a>
-            </li>
-            <li>
-            <img src="/shopping-cart-icon.png" className="icones" alt="" />
-              <a href="#">Saídas</a>
-            </li>
-            <li>
-            <img src="/pdf-icon.png" className="icones" alt="" />
-              <a href="#">Relatórios</a>
-            </li>
-          </ul>
-        </nav>
-        <img src="user-icon.png" alt="" className="user-logo"/>
-      </header>
-
+    
        {/*Sessão para inicio*/}
       <section className="container-inicial">
         <div className="s1">
@@ -88,10 +53,6 @@ const Telainicial = () => {
           </div>
         </div>
       </section>
-
-      <footer>
-        
-      </footer>
     </div>
   );
 };
