@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
 
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -67,6 +68,7 @@ const Telaprodutos = () => {
                   fontSize: '18px',
                   opacity: 1, // Isso é importante para não ficar cinza!
                 },
+                height: 73, // altura total do input
                 width: 400, // largura total do input 
               }
             }}
