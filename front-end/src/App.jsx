@@ -7,9 +7,10 @@ import Telaprodutos from './components/Tela-produtos/tela-produtos';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import MainLayout from './components/MainLayout/MainLayout';
 import RedefinirSenha from './components/redefinirSenha/redefinirSenha';
+import Telasolicitantes from './components/Tela-solicitantes/tela-solicitantes';
 
 function App() {
-  return (    
+  return (
     <Router>
       <Routes>
         <Route element={<AuthLayout />}>
@@ -20,7 +21,8 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route path="/tela-inicial" element={<TelaInicial />} />
-        <Route path="/tela-produtos" element={<Telaprodutos />} />
+          <Route path="/tela-produtos" element={<Telaprodutos />} />
+          <Route path="/tela-solicitantes" element={<Telasolicitantes />} />
         </Route>
       </Routes>
     </Router>

@@ -4,7 +4,7 @@
   width: 100%;
   margin-top: 50px;
   gap: 50px;
-  height: fit-content;
+  height: 100px;
 }
 
 .aba-produtos-titulo {
@@ -29,7 +29,7 @@
 }
 
 .tabela-produtos {
-    width: 100%;
-    min-height: 70vh;
-    margin-top: 50px;
+  width: 100%;
+  min-height: 70vh;
+  margin-top: 50px;
 }

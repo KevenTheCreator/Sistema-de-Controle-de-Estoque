@@ -44,10 +44,10 @@ const Navegacao = () => {
           </li>
         </ul>
       </nav>
-      <AccountCircleIcon sx={{ fontSize: 48, color: 'black', marginLeft: 70}} />
+      <AccountCircleIcon sx={{ fontSize: 48, color: 'black', marginLeft: 70, cursor: 'pointer', transition: 'transform 0.2s ease-in-out', '&:hover': {transform: 'scale(1.1)'}}}/>
     </header>
     </div>
-  );
+  );  
 };
 
 export default Navegacao;

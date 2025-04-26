@@ -7,7 +7,7 @@ import Footer from '../Footer/Footer.jsx';
 
 const MainLayout = () => {
   return (
-    <div className='main-layout'>
+    <div className='main-layout' hieight='100vh'>
         <Navegacao/>
       <Outlet/>
       <Footer/>
