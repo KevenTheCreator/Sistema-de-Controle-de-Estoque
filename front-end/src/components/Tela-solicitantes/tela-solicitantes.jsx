@@ -21,6 +21,7 @@ import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 function StatusChips({ status }) {
@@ -317,16 +318,30 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
         </Typography>
       ) : (
         <>
-          <Typography variant="h6" color="black" align="center">
+          <Typography variant="h6" color="black" align="left">
             SOLICITANTES
           </Typography>
           <TextField
             variant="outlined"
             size="small"
-            placeholder="Pesquisar por solicitante..."
+            placeholder="Pesquisar por solicitante"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             sx={{ width: 300, ml: "auto" }}
+            InputProps={{
+              startAdornment: (
+                <SearchIcon sx={{ color: "black", mr: 1, fontSize: 20 }} />
+              ),
+              sx: {
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "white",
+                  borderRadius: "16px",
+                  "& fieldset": {
+                    borderRadius: "16px",
+                  },
+                },
+              },
+            }}
           />
         </>
       )}
