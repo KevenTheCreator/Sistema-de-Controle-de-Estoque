@@ -19,6 +19,32 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+
+function StatusChips({ status }) {
+  const getChipColor = (status) => {
+    switch (status) {
+      case 'Cancelado':
+        return { label: 'Cancelado', color: 'error' }; // vermelho
+      case 'Pendente':
+        return { label: 'Pendente', color: 'warning' }; // laranja
+      case 'Entregue':
+        return { label: 'Entregue', color: 'success' }; // verde
+      default:
+        return { label: status, color: 'default' }; // cinza padrão
+    }
+  };
+
+  const { label, color } = getChipColor(status);
+
+  return (
+    <Stack direction="row" spacing={1} justifyContent="center">
+      <Chip label={label} color={color} />
+    </Stack>
+  );
+}
 
 function createData(
   id,
@@ -76,7 +102,7 @@ const rows = [
     "MN789",
     "Funcionário",
     "Carlos Souza",
-    "Em andamento"
+    "Cancelado"
   ),
   createData(
     4,
@@ -463,7 +489,7 @@ export default function Telasolicitantes() {
                         {row.nomeSolicitante}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                        {row.status}
+                       <StatusChips status={row.status} />
                       </TableCell>
                     </TableRow>
                   );
