@@ -46,34 +46,33 @@ const Telaprodutos = () => {
     <div className="tela-produtos">
       <div className="aba-produtos">
         <div className="aba-produtos-titulo">
-          <Inventory2Icon sx={{ fontSize: 30, color: 'black', position: "absolute", left: 13, top: 21 }} />
-          <h1>Produtos</h1>
+          <Inventory2Icon sx={{ fontSize: 30, color: 'black', position: "absolute", left: 19, top: 18 }} />
+          <h2>Produtos</h2>
         </div>
         <div className="aba-produtos-pesquisa">
           <TextField
             id="outlined-basic"
-            placeholder="Buscar produtos"
+            placeholder="Pesquisar por produto"
             variant="outlined"
             sx={{
               '& .MuiOutlinedInput-root': {
                 backgroundColor: 'white',
                 borderRadius: '16px',
-                height: '80px', // altura total do input
-                paddingRight: '14px',
+                paddingRight: '40px',
                 '& fieldset': {
                   borderRadius: '16px',
                 },
                 '& input::placeholder': {
                   color: 'gray',
                   fontSize: '18px',
-                  opacity: 1, // Isso é importante para não ficar cinza!
+                  opacity: 1,
                 },
                 height: 73, // altura total do input
                 width: 400, // largura total do input 
               }
             }}
           />
-          <SearchIcon sx={{ position: "absolute", left: 350, top: 30, color: 'black' }} />
+          <SearchIcon sx={{ position: "absolute", left: 350, top: 25, color: 'black' }} />
         </div>
       </div>
 

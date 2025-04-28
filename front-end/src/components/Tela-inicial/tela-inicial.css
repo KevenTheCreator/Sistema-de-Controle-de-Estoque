@@ -1,42 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
-
-.header {
-    display: flex;
-    justify-self: center;
-    align-items: center;
-    text-align: center;
-    background-color: #ffffff;
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 90%;
-    height: 100px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.div-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #0066FF;
-    border-radius: 10px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    width: 200px;
-    height: 100px;
-}
-
-.logo-header {
-    width: 100px;
-    height: 30px;
-}
-
-.navbar {
-    display: flex;
-    width: 50%;
-    height: 100px;
-}
-
 #icon1 {
     display: flex;
     margin-left: 165px;
@@ -53,57 +16,6 @@
     display: flex;
     margin-left: 165px;
     margin-top: 20px;
-}
-
-.navlist {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 170px;
-    height: 100px;
-    gap: 70px;
-}
-
-.navlist li {
-    margin-left: 30px;
-    position: relative;
-    list-style-type: none;
-}
-
-.navlist a {
-    font-family: 'Montserrat', sans-serif;
-    position: relative;
-    text-decoration: none;
-    color: rgb(94, 94, 94);
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.navlist a:hover {
-    color: black;
-    transition: 0.6s;
-}
-
-.navlist a::before {
-    position: absolute;
-    content: '';
-    top: 240%;
-    width: 0;
-    height: 4px;
-    background: black;
-}
-
-.navlist a:hover::before {
-    width: 100%;
-}
-
-.navlist:hover::before {
-    width: 100%;
-}
-
-.navlist li {
-    display: flex;
-    gap: 5px;
 }
 
 .icones {
@@ -132,6 +44,7 @@
     background-color: white;
     border-top-right-radius: 16px;
     border-bottom-right-radius: 16px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .bar {
@@ -248,6 +161,7 @@
     height: 400px;
     background-color: white;
     border-radius: 16px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .container-atalhos img {

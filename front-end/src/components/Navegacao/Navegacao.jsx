@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // <-- IMPORTANTE
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
+import InventoryIcon from '@mui/icons-material/Inventory';
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -10,6 +10,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import "./Navegacao.css";
 
 const Navegacao = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,35 +39,47 @@ const Navegacao = () => {
         <nav className="navbar">
           <ul className="navlist">
             <li>
-              <HomeIcon sx={{ fontSize: 30, color: "black", position: "absolute", right: 58, bottom: -1 }} />
-              <Link to="/tela-inicial">Inicio</Link>
+              <Link to="/tela-inicial">
+                <HomeIcon sx={{ fontSize: 30, color: "black"}} />
+                Inicio
+              </Link>
             </li>
             <li>
-              <Inventory2Icon sx={{ fontSize: 25, color: "black", position: "absolute", right: 99, bottom: -1 }} />
-              <Link to="/tela-produtos">Produtos</Link>
+              <Link to="/tela-produtos">
+                <InventoryIcon sx={{ fontSize: 30, color: "black"}} />
+                Produtos
+              </Link>
             </li>
             <li>
-              <Diversity3Icon sx={{ fontSize: 30, color: "black", position: "absolute", right: 127, bottom: -1 }} />
-              <Link to="/tela-solicitantes">Solicitantes</Link>
+              <Link to="/tela-solicitantes">
+                <Diversity3Icon sx={{ fontSize: 30, color: "black"}} />
+                Solicitantes
+              </Link>
             </li>
             <li>
-              <LocalShippingIcon sx={{ fontSize: 30, color: "black", position: "absolute", right: 97, bottom: -1 }} />
-              <Link to="/tela-entradas">Entradas</Link>
+              <Link to="/tela-entradas">
+                <LocalShippingIcon sx={{ fontSize: 30, color: "black"}} />
+                Entradas
+              </Link>
             </li>
             <li>
-              <ShoppingCartIcon sx={{ fontSize: 30, color: "black", position: "absolute", right: 70, bottom: -1 }} />
-              <Link to="/tela-saidas">Saídas</Link>
+              <Link to="/tela-saidas">
+                <ShoppingCartIcon sx={{ fontSize: 30, color: "black"}} />
+                Saídas
+              </Link>
             </li>
             <li>
-              <InsertDriveFileIcon sx={{ fontSize: 30, color: "black", position: "absolute", right: 107, bottom: -1 }} />
-              <Link to="/tela-relatorios">Relatórios</Link>
+              <Link to="/tela-relatorios">
+                <InsertDriveFileIcon sx={{ fontSize: 30, color: "black"}} />
+                Relatórios
+              </Link>
             </li>
           </ul>
         </nav>
         <AccountCircleIcon
           onClick={handleClick}
           sx={{
-            fontSize: 48,
+            fontSize: 41,
             color: "black",
             marginLeft: 70,
             cursor: "pointer",
