@@ -36,57 +36,59 @@ const Navegacao = () => {
         <div className="div-logo">
           <img className="logo-header" src="/logo-principal.png" alt="" />
         </div>
-        <nav className="navbar">
-          <ul className="navlist">
-            <li>
-              <Link to="/tela-inicial">
-                <HomeIcon sx={{ fontSize: 30, color: "black"}} />
-                Inicio
-              </Link>
-            </li>
-            <li>
-              <Link to="/tela-produtos">
-                <InventoryIcon sx={{ fontSize: 30, color: "black"}} />
-                Produtos
-              </Link>
-            </li>
-            <li>
-              <Link to="/tela-solicitantes">
-                <Diversity3Icon sx={{ fontSize: 30, color: "black"}} />
-                Solicitantes
-              </Link>
-            </li>
-            <li>
-              <Link to="/tela-entradas">
-                <LocalShippingIcon sx={{ fontSize: 30, color: "black"}} />
-                Entradas
-              </Link>
-            </li>
-            <li>
-              <Link to="/tela-saidas">
-                <ShoppingCartIcon sx={{ fontSize: 30, color: "black"}} />
-                Saídas
-              </Link>
-            </li>
-            <li>
-              <Link to="/tela-relatorios">
-                <InsertDriveFileIcon sx={{ fontSize: 30, color: "black"}} />
-                Relatórios
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <div className="container-icon">
         <AccountCircleIcon
           onClick={handleClick}
           sx={{
             fontSize: 41,
             color: "black",
-            marginLeft: 70,
+            marginLeft: 0, // Alterado para 0
             cursor: "pointer",
             transition: "transform 0.5s ease-in-out",
             "&:hover": { transform: "scale(1.1)" },
           }}
         />
+        </div>
+        <nav className="navbar">
+          <ul className="navlist">
+            <li>
+              <Link to="/tela-inicial">
+                <HomeIcon sx={{ fontSize: 30, color: "black", position: "relative", top: 6}} />
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link to="/tela-produtos">
+                <InventoryIcon sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
+                Produtos
+              </Link>
+            </li>
+            <li>
+              <Link to="/tela-solicitantes">
+                <Diversity3Icon sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                Solicitantes
+              </Link>
+            </li>
+            <li>
+              <Link to="/tela-entradas">
+                <LocalShippingIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                Entradas
+              </Link>
+            </li>
+            <li>
+              <Link to="/tela-saidas">
+                <ShoppingCartIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                Saídas
+              </Link>
+            </li>
+            <li>
+              <Link to="/tela-relatorios">
+                <InsertDriveFileIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                Relatórios
+              </Link>
+            </li>
+          </ul>
+        </nav>
         <Menu
           id="basic-menu"
           anchorEl={anchorEl}
