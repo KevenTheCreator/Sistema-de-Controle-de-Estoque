@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
 .Home {
     display: flex;
     justify-content: center;
@@ -40,6 +42,7 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     width: 200px;
+    gap: 20px;
     height: 100px;
     order: 1;
 }
@@ -100,4 +103,17 @@
 
 .navlist a:hover::before {
     width: 100%; /* Expande o pseudo-elemento ao passar o mouse */
+}
+
+@media (max-width: 1400px ) {
+    .navlist a::before {
+    top: 144%;
+    }
+    .navlist a {
+        font-size: small;
+    }
+    
+    .iconNav {
+        font-size: small;
+    }
 }

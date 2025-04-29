@@ -251,7 +251,7 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
 
   return (
-    <TableHead sx={{ position: "relative" }}>
+    <TableHead sx={{ position: "relative", top: -10 }}>
       <TableRow sx={{ backgroundColor: "#0066FF" }}>
         <TableCell padding="checkbox">
           <Checkbox
@@ -426,7 +426,7 @@ export default function Telasolicitantes() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper
-        sx={{ width: "90%", mb: 2, borderRadius: 2, p: 2, mt: 10, mx: "auto" }}
+        sx={{ width: "90%", mb: 2, borderRadius: 2, p: 2, mt: 10, mx: "auto", marginTop: 7 }}
       >
         <EnhancedTableToolbar
           numSelected={selected.length}

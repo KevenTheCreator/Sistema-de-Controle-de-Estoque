@@ -7,6 +7,9 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -37,12 +40,17 @@ const Navegacao = () => {
           <img className="logo-header" src="/logo-principal.png" alt="" />
         </div>
         <div className="container-icon">
+        <Badge badgeContent={100} color="error">
+        <NotificationsIcon sx={{cursor: 'pointer',
+        fontSize: 30, transition: "transform 0.5s ease-in-out",
+        "&:hover": { transform: "scale(1.1)" } }}></NotificationsIcon>
+        </Badge>
         <AccountCircleIcon
           onClick={handleClick}
           sx={{
             fontSize: 41,
             color: "black",
-            marginLeft: 0, // Alterado para 0
+            marginLeft: 0,
             cursor: "pointer",
             transition: "transform 0.5s ease-in-out",
             "&:hover": { transform: "scale(1.1)" },
@@ -53,37 +61,37 @@ const Navegacao = () => {
           <ul className="navlist">
             <li>
               <Link to="/tela-inicial">
-                <HomeIcon sx={{ fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <HomeIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6}} />
                 Inicio
               </Link>
             </li>
             <li>
               <Link to="/tela-produtos">
-                <InventoryIcon sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
+                <InventoryIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
                 Produtos
               </Link>
             </li>
             <li>
               <Link to="/tela-solicitantes">
-                <Diversity3Icon sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                <Diversity3Icon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
                 Solicitantes
               </Link>
             </li>
             <li>
               <Link to="/tela-entradas">
-                <LocalShippingIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                <LocalShippingIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
                 Entradas
               </Link>
             </li>
             <li>
               <Link to="/tela-saidas">
-                <ShoppingCartIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <ShoppingCartIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
                 Saídas
               </Link>
             </li>
             <li>
               <Link to="/tela-relatorios">
-                <InsertDriveFileIcon sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <InsertDriveFileIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
                 Relatórios
               </Link>
             </li>
