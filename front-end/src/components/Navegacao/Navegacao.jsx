@@ -2,14 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // <-- IMPORTANTE
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
-import InventoryIcon from '@mui/icons-material/Inventory';
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Badge from '@mui/material/Badge';
-
+import WidgetsIcon from '@mui/icons-material/Widgets';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
@@ -67,7 +66,7 @@ const Navegacao = () => {
             </li>
             <li>
               <Link to="/tela-produtos">
-                <InventoryIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
+                <WidgetsIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
                 Produtos
               </Link>
             </li>
