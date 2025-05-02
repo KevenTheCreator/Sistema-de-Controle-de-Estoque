@@ -251,7 +251,7 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
 
   return (
-    <TableHead sx={{ position: "relative", top: -10 }}>
+    <TableHead sx={{ position: "relative" }}>
       <TableRow sx={{ backgroundColor: "#0066FF" }}>
         <TableCell padding="checkbox">
           <Checkbox

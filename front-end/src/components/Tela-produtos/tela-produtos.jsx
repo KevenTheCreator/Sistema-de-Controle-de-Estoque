@@ -25,7 +25,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function StatusChips({ status }) {
   const getChipColor = (status) => {
@@ -248,7 +252,7 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
 
   return (
-    <TableHead sx={{ position: "relative", top: -10 }}>
+    <TableHead sx={{ position: "relative" }}>
       <TableRow sx={{ backgroundColor: "#0066FF" }}>
         <TableCell padding="checkbox">
           <Checkbox
@@ -288,7 +292,7 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
+function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog }) {
   return (
     <Toolbar
       sx={[
@@ -344,7 +348,92 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
               },
             }}
           />
-          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0}}>Cadastrar Produto</Button>
+          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0}} onClick={handleOpenDialog} // Abre o Dialog ao clicar
+          >Cadastrar Produto</Button>
+          <React.Fragment>
+      <Dialog open={openDialog} onClose={handleCloseDialog}
+        slotProps={{
+          paper: {
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+            },
+          },
+        }}
+      >
+        <DialogTitle>Cadastrar Produto</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: "column", width: 600, gap: 3 }}>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Nome do Produto"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Quantidade"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Fornecedor"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Código do Produto"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Unidade de Medida"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            label="Categoria"
+            type="text"
+            fullWidth
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions sx={{ mr: 2, mb: 2 }}>
+          <Button variant="outlined" onClick={handleCloseDialog} sx={{fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0}}>Cancelar</Button>
+          <Button variant="contained" type="submit"  sx={{fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0}}>Cadastrar</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
         </>
       )}
 
@@ -373,6 +462,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
 }
 
 export default function Telaprodutos() {
+  
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("produto");
   const [selected, setSelected] = React.useState([]);
@@ -380,6 +470,9 @@ export default function Telaprodutos() {
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState("");
+  const [openDialog, setOpenDialog] = React.useState(false); 
+  const handleOpenDialog = () => setOpenDialog(true); 
+  const handleCloseDialog = () => setOpenDialog(false); 
 
   const filteredRows = rows.filter(
     (row) =>
@@ -441,6 +534,9 @@ export default function Telaprodutos() {
           numSelected={selected.length}
           filter={filter}
           setFilter={setFilter}
+          openDialog={openDialog} // Passa o estado do Dialog
+          handleOpenDialog={handleOpenDialog} // Passa a função para abrir o Dialog
+          handleCloseDialog={handleCloseDialog} // Passa a função para fechar o Dialog
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -494,7 +590,7 @@ export default function Telaprodutos() {
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.produto} {/* Produto */}
                       </TableCell>
-                      <TableCell align="center" sx={{ minWidth: 100 }}>
+                      <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.quantidadeProduto} {/* quantidadeProduto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
