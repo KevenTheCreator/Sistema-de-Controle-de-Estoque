@@ -318,7 +318,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
         </Typography>
       ) : (
         <>
-          <Typography variant="h6" color="black" align="left">
+          <Typography variant="h6" color="black" align="left" sx={{ fontFamily: "Montserrat", fontWeight: 700 }}>
             SOLICITANTES
           </Typography>
           <TextField
