@@ -22,6 +22,9 @@ import TextField from "@mui/material/TextField";
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 
 function StatusChips({ status }) {
@@ -50,24 +53,22 @@ function StatusChips({ status }) {
 function createData(
   id,
   produto,
-  quantidadeRet,
-  dataSaida,
-  dataEntrega,
-  codProduto,
-  tipoSolicitante,
-  nomeSolicitante,
+  quantidadeProduto,
+  fornecedor,
+  codigoProduto,
+  unidadeMedida,
+  categoria,
   status
 ) {
   return {
     id,
     produto,
-    quantidadeRet,
-    dataSaida,
-    dataEntrega,
-    codProduto,
-    tipoSolicitante,
-    nomeSolicitante,
-    status,
+    quantidadeProduto,
+    fornecedor,
+    codigoProduto,
+    unidadeMedida,
+    categoria,
+    status
   };
 }
 
@@ -76,110 +77,100 @@ const rows = [
     1,
     "Teclado Mecânico",
     3,
-    "2025-03-10",
-    "2025-03-15",
+    "Logitech",
     "TM123",
-    "Funcionário",
-    "João Silva",
+    "Unidade",
+    "Periféricos",
     "Entregue"
   ),
   createData(
     2,
     "Mouse Gamer",
     2,
-    "2025-04-01",
-    "2025-04-05",
+    "Razer",
     "MG456",
-    "Docente",
-    "Maria Oliveira",
+    "Unidade",
+    "Periféricos",
     "Pendente"
   ),
   createData(
     3,
     'Monitor 24"',
     1,
-    "2025-04-10",
-    "2025-04-20",
+    "Samsung",
     "MN789",
-    "Funcionário",
-    "Carlos Souza",
+    "Unidade",
+    "Monitores",
     "Cancelado"
   ),
   createData(
     4,
     "Notebook Dell",
     5,
-    "2025-04-12",
-    "2025-04-18",
+    "Dell",
     "ND321",
-    "Funcionário",
-    "Ana Costa",
+    "Unidade",
+    "Computadores",
     "Entregue"
   ),
   createData(
     5,
     "Headset Gamer",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "HyperX",
     "HG654",
-    "Docente",
-    "Pedro Lima",
+    "Unidade",
+    "Áudio",
     "Cancelado"
   ),
   createData(
     6,
     "Webcam Full HD",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "Logitech",
     "WF987",
-    "Docente",
-    "Fernanda Alves",
+    "Unidade",
+    "Câmeras",
     "Cancelado"
   ),
   createData(
     7,
     "Mousepad RGB",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "SteelSeries",
     "MR654",
-    "Discente",
-    "Lucas Martins",
+    "Unidade",
+    "Acessórios",
     "Cancelado"
   ),
   createData(
     8,
     "Caixa de Som Bluetooth",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "JBL",
     "CS123",
-    "Discente",
-    "Beatriz Rocha",
+    "Unidade",
+    "Áudio",
     "Cancelado"
   ),
   createData(
     9,
     "Adaptador USB-C",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "Anker",
     "AU456",
-    "Discente",
-    "Rafael Santos",
+    "Unidade",
+    "Acessórios",
     "Cancelado"
   ),
   createData(
     10,
     "Dock Station",
     4,
-    "2025-03-22",
-    "2025-03-29",
+    "Baseus",
     "DS789",
-    "Funcionário",
-    "Gabriela Mendes",
+    "Unidade",
+    "Acessórios",
     "Cancelado"
   ),
 ];
@@ -221,7 +212,7 @@ const headCells = [
   },
 
   {
-    id: "codProduto",
+    id: "codigoProduto",
     numeric: false,
     disablePadding: false,
     label: "Código do produto",
@@ -241,16 +232,7 @@ const headCells = [
     label: "Categoria",
   },
   
-  { id: "status", 
-    numeric: false, 
-    disablePadding: false, 
-    label: "Status" },
-  {
-    id: "editarId",
-    numeric: false,
-    disablePadding: false,
-    label: "Editar",
-  },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -317,6 +299,9 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
           position: "relative",
           alignItems: "center",
           gap: 2,
+          "& .MuiToolbar-root": {
+            position: "relative",
+          },
         },
         numSelected > 0 && {
           bgcolor: (theme) =>
@@ -328,18 +313,19 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
       ]}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ width: "100%" }} color="inherit" variant="subtitle1">
+        <Typography sx={{ width: "100%", fontFamily: "Montserrat" }} color="inherit" variant="subtitle1">
           {numSelected} selecionado(s)
         </Typography>
       ) : (
         <>
-          <Typography variant="h6" color="black" align="left">
+          <Typography variant="h6" color="black" align="left" sx={{ fontFamily: "Montserrat", fontWeight: 700 }}>
             PRODUTOS
           </Typography>
+      
           <TextField
             variant="outlined"
             size="small"
-            placeholder="Pesquisar por solicitante"
+            placeholder="Pesquisar por produto"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             sx={{ width: 300, ml: "auto" }}
@@ -358,15 +344,23 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
               },
             }}
           />
+          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0}}>Cadastrar Produto</Button>
         </>
       )}
 
       {numSelected > 0 ? (
+        <>
+        <Tooltip title="Editar">
+        <IconButton>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
         <Tooltip title="Excluir">
           <IconButton>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+        </>
       ) : (
         <Tooltip title="Filtrar lista">
           <IconButton>
@@ -389,8 +383,8 @@ export default function Telaprodutos() {
 
   const filteredRows = rows.filter(
     (row) =>
-      row.tipoSolicitante.toLowerCase().includes(filter.toLowerCase()) ||
-      row.nomeSolicitante.toLowerCase().includes(filter.toLowerCase())
+      row.produto.toLowerCase().includes(filter.toLowerCase()) ||
+      row.codigoProduto.toLowerCase().includes(filter.toLowerCase())
   );
 
   const handleRequestSort = (event, property) => {
@@ -501,25 +495,19 @@ export default function Telaprodutos() {
                         {row.produto} {/* Produto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                        {row.quantidaProduto} {/* Quantidade */}
+                        {row.quantidadeProduto} {/* quantidadeProduto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.fornecedorId} {/* Fornecedor */}
+                        {row.fornecedor} {/* Fornecedor */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.codProduto} {/* Código do Produto */}
+                        {row.codigoProduto} {/* Código do Produto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.unidadeMedida} {/* Unidade de Medida */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.categoriaId} {/* Categoria */}
-                      </TableCell>
-                      <TableCell align="center" sx={{ minWidth: 100 }}>
-                        <StatusChips status={row.status} /> {/* Status */}
-                      </TableCell>
-                      <TableCell align="center" sx={{ minWidth: 100 }}>
-                        <StatusChips editarId={row.editarId} /> {/* Status */}
+                        {row.categoria} {/* Categoria */}
                       </TableCell>
                     </TableRow>
                   );
