@@ -47,7 +47,7 @@ const Navegacao = () => {
         <AccountCircleIcon
           onClick={handleClick}
           sx={{
-            fontSize: 41,
+            fontSize: 50,
             color: "black",
             marginLeft: 0,
             cursor: "pointer",
@@ -60,37 +60,37 @@ const Navegacao = () => {
           <ul className="navlist">
             <li>
               <Link to="/tela-inicial">
-                <HomeIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <HomeIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 1}} />
                 Inicio
               </Link>
             </li>
             <li>
               <Link to="/tela-produtos">
-                <WidgetsIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 3}} />
+                <WidgetsIcon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 1, right: 3}} />
                 Produtos
               </Link>
             </li>
             <li>
               <Link to="/tela-solicitantes">
-                <Diversity3Icon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                <Diversity3Icon className="iconNav" sx={{ fontSize: 30, color: "black", position: "relative", top: 1, right: 5}} />
                 Solicitantes
               </Link>
             </li>
             <li>
               <Link to="/tela-entradas">
-                <LocalShippingIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6, right: 5}} />
+                <LocalShippingIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 1, right: 5}} />
                 Entradas
               </Link>
             </li>
             <li>
               <Link to="/tela-saidas">
-                <ShoppingCartIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <ShoppingCartIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 1}} />
                 Saídas
               </Link>
             </li>
             <li>
               <Link to="/tela-relatorios">
-                <InsertDriveFileIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 6}} />
+                <InsertDriveFileIcon className="iconNav" sx={{fontSize: 30, color: "black", position: "relative", top: 1}} />
                 Relatórios
               </Link>
             </li>
