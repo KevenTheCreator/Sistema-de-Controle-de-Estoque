@@ -9,7 +9,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import "./tela-inicial.css";
 
 const Telainicial = () => {
-  const navigate = useNavigate(); // Inicializando o hook useNavigate
+  const navigate = useNavigate(); 
 
   return (
     <div className="Home">

@@ -22,6 +22,16 @@ import TextField from "@mui/material/TextField";
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
 
 
 function StatusChips({ status }) {
@@ -291,7 +301,17 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
+function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog }) {
+  const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
+  const [filterCategory, setFilterCategory] = React.useState("");
+
+  const handleFilterDialogOpen = () => setFilterDialogOpen(true);
+  const handleFilterDialogClose = () => setFilterDialogOpen(false);
+  const applyFilters = () => {
+    // Lógica para aplicar os filtros
+    console.log("Filtro aplicado:", { filter, filterCategory });
+    setFilterDialogOpen(false); // Fecha o Dialog após aplicar os filtros
+  };
   return (
     <Toolbar
       sx={[
@@ -353,11 +373,56 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filtrar lista">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title="Filtrar lista">
+            <IconButton onClick={handleFilterDialogOpen}>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+
+          {/* Dialog para o filtro */}
+          <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
+            <DialogTitle>Filtrar Solicitantes</DialogTitle>
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel id="sort-by-label">Ordenar por</InputLabel>
+                <Select
+                  labelId="sort-by-label"
+                  id="sort-by"
+                  label="Ordenar por"
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                >
+                  <MenuItem value="produto">Produto</MenuItem>
+                  <MenuItem value="quantidade">Quantidade</MenuItem>
+                  <MenuItem value="fornecedor">Fornecedor</MenuItem>
+                  <MenuItem value="codigoProduto">Código do Produto</MenuItem>
+                  <MenuItem value="unidadeMedida">Unidade de Medida</MenuItem>
+                  <MenuItem value="categoria">Categoria</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl fullWidth margin="dense">
+                <InputLabel id="classification-order-label">Ordem de classificação</InputLabel>
+                <Select
+                  labelId="classification-order-label"
+                  id="classification-order"
+                  label="Ordem de classificação"
+                  value={filterCategory}
+                  onChange={(e) => setFilterCategory(e.target.value)}
+                >
+                  <MenuItem value="ascendente">Ascendente</MenuItem>
+                  <MenuItem value="descendente">Descendente</MenuItem>
+                </Select>
+              </FormControl>
+
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleFilterDialogClose}>Cancelar</Button>
+              <Button onClick={applyFilters}>Aplicar</Button>
+            </DialogActions>
+          </Dialog>
+        </>
       )}
     </Toolbar>
   );
@@ -504,7 +569,7 @@ export default function Telasolicitantes() {
                         {row.nomeSolicitante}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                       <StatusChips status={row.status} />
+                        <StatusChips status={row.status} />
                       </TableCell>
                     </TableRow>
                   );

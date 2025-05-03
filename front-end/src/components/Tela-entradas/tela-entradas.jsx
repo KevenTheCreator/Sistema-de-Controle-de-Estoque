@@ -61,22 +61,22 @@ function StatusChips({ status }) {
 function createData(
   id,
   produto,
-  quantidadeProduto,
+  quantidadeRec,
   fornecedor,
-  codigoProduto,
-  unidadeMedida,
-  categoria,
-  status
+  DataDeEntrada,
+  NumeroDoPedido,
+  ValorTotal,
+  Responsavel
 ) {
   return {
     id,
     produto,
-    quantidadeProduto,
+    quantidadeRec,
     fornecedor,
-    codigoProduto,
-    unidadeMedida,
-    categoria,
-    status
+    DataDeEntrada,
+    NumeroDoPedido,
+    ValorTotal,
+    Responsavel
   };
 }
 
@@ -86,100 +86,100 @@ const rows = [
     "Teclado Mecânico",
     3,
     "Logitech",
-    "TM123",
-    "Unidade",
-    "Periféricos",
-    "Entregue"
+    "24-02-2025",
+    "0001",
+    "R$ 299,00",
+    "Lucas Silva"
   ),
   createData(
     2,
     "Mouse Gamer",
     2,
     "Razer",
-    "MG456",
-    "Unidade",
-    "Periféricos",
-    "Pendente"
+    "25-02-2025",
+    "0002",
+    "R$ 199,00",
+    "Ana Costa"
   ),
   createData(
     3,
-    'Monitor 24"',
+    "Monitor 24\"",
     1,
     "Samsung",
-    "MN789",
-    "Unidade",
-    "Monitores",
-    "Cancelado"
+    "26-02-2025",
+    "0003",
+    "R$ 899,00",
+    "Carlos Souza"
   ),
   createData(
     4,
     "Notebook Dell",
     5,
     "Dell",
-    "ND321",
-    "Unidade",
-    "Computadores",
-    "Entregue"
+    "27-02-2025",
+    "0004",
+    "R$ 4.999,00",
+    "Mariana Lima"
   ),
   createData(
     5,
     "Headset Gamer",
     4,
     "HyperX",
-    "HG654",
-    "Unidade",
-    "Áudio",
-    "Cancelado"
+    "28-02-2025",
+    "0005",
+    "R$ 349,00",
+    "João Pedro"
   ),
   createData(
     6,
     "Webcam Full HD",
-    4,
+    2,
     "Logitech",
-    "WF987",
-    "Unidade",
-    "Câmeras",
-    "Cancelado"
+    "01-03-2025",
+    "0006",
+    "R$ 249,00",
+    "Fernanda Alves"
   ),
   createData(
     7,
     "Mousepad RGB",
-    4,
+    6,
     "SteelSeries",
-    "MR654",
-    "Unidade",
-    "Acessórios",
-    "Cancelado"
+    "02-03-2025",
+    "0007",
+    "R$ 99,00",
+    "Rafael Silva"
   ),
   createData(
     8,
     "Caixa de Som Bluetooth",
-    4,
+    3,
     "JBL",
-    "CS123",
-    "Unidade",
-    "Áudio",
-    "Cancelado"
+    "03-03-2025",
+    "0008",
+    "R$ 399,00",
+    "Beatriz Santos"
   ),
   createData(
     9,
     "Adaptador USB-C",
-    4,
+    10,
     "Anker",
-    "AU456",
-    "Unidade",
-    "Acessórios",
-    "Cancelado"
+    "04-03-2025",
+    "0009",
+    "R$ 79,00",
+    "Gabriel Oliveira"
   ),
   createData(
     10,
     "Dock Station",
-    4,
+    2,
     "Baseus",
-    "DS789",
-    "Unidade",
-    "Acessórios",
-    "Cancelado"
+    "05-03-2025",
+    "0010",
+    "R$ 599,00",
+    "Larissa Mendes"
   ),
 ];
 
@@ -210,40 +210,45 @@ const headCells = [
     label: "Produto"
   },
   {
-    id: "quantidaProduto",
+    id: "quantidaRec",
     numeric: true,
     disablePadding: false,
     label: "Quantidade",
   },
 
   {
-    id: "fornecedorId",
+    id: "fornecedor",
     numeric: false,
     disablePadding: false,
     label: "Fornecedor",
   },
 
   {
-    id: "codigoProduto",
+    id: "DataDeEntrada",
     numeric: false,
     disablePadding: false,
-    label: "Código do produto",
+    label: "Data de Entrada",
   },
 
   {
-    id: "unidadeMedida",
+    id: "NumeroDoPedido",
     numeric: false,
     disablePadding: false,
-    label: "Unidade de Medida",
+    label: "Numero do Pedido",
   },
 
   {
-    id: "categoriaId",
+    id: "ValorTotal",
     numeric: false,
     disablePadding: false,
-    label: "Categoria",
+    label: "Valor Total",
   },
-
+  {
+    id: "Responsavel",
+    numeric: false,
+    disablePadding: false,
+    label: "Responsável",
+  },
 
 ];
 
@@ -342,13 +347,13 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
       ) : (
         <>
           <Typography variant="h6" color="black" align="left" sx={{ fontFamily: "Montserrat", fontWeight: 700 }}>
-            PRODUTOS
+            ENTRADAS
           </Typography>
 
           <TextField
             variant="outlined"
             size="small"
-            placeholder="Pesquisar por produto"
+            placeholder="Pesquisar por entrada"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             sx={{ width: 300, ml: "auto" }}
@@ -368,7 +373,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
             }}
           />
           <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} // Abre o Dialog ao clicar
-          >Cadastrar Produto</Button>
+          >Cadastrar Entrada</Button>
           <React.Fragment>
             <Dialog open={openDialog} onClose={handleCloseDialog}
               slotProps={{
@@ -384,7 +389,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 },
               }}
             >
-              <DialogTitle>Cadastrar Produto</DialogTitle>
+              <DialogTitle>Cadastrar Entrada</DialogTitle>
               <DialogContent sx={{ display: 'flex', flexDirection: "column", width: 600, gap: 3 }}>
                 <TextField
                   autoFocus
@@ -400,7 +405,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="quantity"
-                  label="Quantidade"
+                  label="QuantidadeRec"
                   type="number"
                   fullWidth
                   variant="outlined"
@@ -418,7 +423,25 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="product-code"
-                  label="Código do Produto"
+                  label="Numero do Pedido"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                />
+                <TextField
+                  required
+                  margin="dense"
+                  id="valor-total"
+                  label="Valor Total"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                />
+                <TextField
+                  required
+                  margin="dense"
+                  id="responsavel"
+                  label="Responsável"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -488,32 +511,34 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
 
           {/* Dialog para o filtro */}
           <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
-            <DialogTitle>Filtrar Produtos</DialogTitle>
+            <DialogTitle>Filtrar Entradas</DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
+
               <FormControl fullWidth margin="dense">
-                <InputLabel id="sort-by-label">Ordenar por</InputLabel>
+                <InputLabel id="order-by-label">Ordenar por</InputLabel>
                 <Select
-                  labelId="sort-by-label"
-                  id="sort-by"
+                  labelId="order-by-label"
+                  id="order-by"
                   label="Ordenar por"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
                   <MenuItem value="produto">Produto</MenuItem>
-                  <MenuItem value="quantidade">Quantidade</MenuItem>
+                  <MenuItem value="quantidade">Quantidade Rec.</MenuItem>
                   <MenuItem value="fornecedor">Fornecedor</MenuItem>
-                  <MenuItem value="codigoProduto">Código do Produto</MenuItem>
-                  <MenuItem value="unidadeMedida">Unidade de Medida</MenuItem>
-                  <MenuItem value="categoria">Categoria</MenuItem>
+                  <MenuItem value="dataEntrada">Data de Entrada</MenuItem>
+                  <MenuItem value="numeroPedido">Número do Pedido</MenuItem>
+                  <MenuItem value="valorTotal">Valor Total</MenuItem>
+                  <MenuItem value="responsavel">Responsável</MenuItem>
                 </Select>
               </FormControl>
 
               <FormControl fullWidth margin="dense">
-                <InputLabel id="classification-order-label">Ordem de classificação</InputLabel>
+                <InputLabel id="sort-direction-label">Ordem de Classificação</InputLabel>
                 <Select
-                  labelId="classification-order-label"
-                  id="classification-order"
-                  label="Ordem de classificação"
+                  labelId="sort-direction-label"
+                  id="sort-direction"
+                  label="Ordem de Classificação"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
@@ -534,7 +559,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
   );
 }
 
-export default function Telaprodutos() {
+export default function TelaEntrada() {
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("produto");
@@ -550,7 +575,10 @@ export default function Telaprodutos() {
   const filteredRows = rows.filter(
     (row) =>
       row.produto.toLowerCase().includes(filter.toLowerCase()) ||
-      row.codigoProduto.toLowerCase().includes(filter.toLowerCase())
+      row.fornecedor.toLowerCase().includes(filter.toLowerCase()) ||
+      row.DataDeEntrada.toLowerCase().includes(filter.toLowerCase()) ||
+      row.NumeroDoPedido.toLowerCase().includes(filter.toLowerCase()) ||
+      row.Responsavel.toLowerCase().includes(filter.toLowerCase())
   );
 
   const handleRequestSort = (event, property) => {
@@ -664,19 +692,22 @@ export default function Telaprodutos() {
                         {row.produto} {/* Produto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.quantidadeProduto} {/* quantidadeProduto */}
+                        {row.quantidadeRec} {/* quantidadeProduto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.fornecedor} {/* Fornecedor */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.codigoProduto} {/* Código do Produto */}
+                        {row.DataDeEntrada} {/* Código do Produto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.unidadeMedida} {/* Unidade de Medida */}
+                        {row.NumeroDoPedido} {/* Unidade de Medida */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.categoria} {/* Categoria */}
+                        {row.ValorTotal} {/* Unidade de Medida */}
+                      </TableCell>
+                      <TableCell align="center" sx={{ minWidth: 150 }}>
+                        {row.Responsavel} {/* Categoria */}
                       </TableCell>
                     </TableRow>
                   );

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/login/login';
 import EsqueceuSenha from './components/EsqueceuSenha/esqueceuSenha';
@@ -8,6 +7,8 @@ import AuthLayout from './components/AuthLayout/AuthLayout';
 import MainLayout from './components/MainLayout/MainLayout';
 import RedefinirSenha from './components/redefinirSenha/redefinirSenha';
 import Telasolicitantes from './components/Tela-solicitantes/tela-solicitantes';
+import TelaSaidas from './components/Tela-saidas/tela-saidas';
+import TelaEntrada from './components/Tela-entradas/tela-entradas';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/tela-inicial" element={<TelaInicial />} />
           <Route path="/tela-produtos" element={<Telaprodutos />} />
+          <Route path="/tela-saidas" element={<TelaSaidas />} />
+          <Route path="/tela-entradas" element={<TelaEntrada />} />
           <Route path="/tela-solicitantes" element={<Telasolicitantes />} />
         </Route>
       </Routes>
