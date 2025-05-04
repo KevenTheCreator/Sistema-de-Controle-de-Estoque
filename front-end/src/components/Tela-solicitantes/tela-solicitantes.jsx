@@ -417,9 +417,9 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               </FormControl>
 
             </DialogContent>
-            <DialogActions>
-              <Button onClick={handleFilterDialogClose}>Cancelar</Button>
-              <Button onClick={applyFilters}>Aplicar</Button>
+            <DialogActions sx={{ mr: 2, mb: 2 }}>
+              <Button variant="outlined" onClick={handleFilterDialogClose} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
+              <Button variant="contained" onClick={applyFilters} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
             </DialogActions>
           </Dialog>
         </>

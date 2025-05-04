@@ -47,7 +47,7 @@ const Navegacao = () => {
         <AccountCircleIcon
           onClick={handleClick}
           sx={{
-            fontSize: 50,
+            fontSize: 40,
             color: "black",
             marginLeft: 0,
             cursor: "pointer",

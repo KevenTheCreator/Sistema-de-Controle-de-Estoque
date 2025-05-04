@@ -19,8 +19,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
@@ -33,50 +31,27 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-
-
-function StatusChips({ status }) {
-  const getChipColor = (status) => {
-    switch (status) {
-      case 'Cancelado':
-        return { label: 'Cancelado', color: 'error' }; // vermelho
-      case 'Pendente':
-        return { label: 'Pendente', color: 'warning' }; // laranja
-      case 'Entregue':
-        return { label: 'Entregue', color: 'success' }; // verde
-      default:
-        return { label: status, color: 'default' }; // cinza padrão
-    }
-  };
-
-  const { label, color } = getChipColor(status);
-
-  return (
-    <Stack direction="row" spacing={1} justifyContent="center">
-      <Chip label={label} color={color} />
-    </Stack>
-  );
-}
+import axios from "axios"; // Importando axios
+import Snackbar from "@mui/material/Snackbar"; // Para exibir mensagens
+import Alert from "@mui/material/Alert"; // Para estilizar mensagens
 
 function createData(
   id,
   produto,
-  quantidadeProduto,
+  quantidade,
   fornecedor,
   codigoProduto,
   unidadeMedida,
   categoria,
-  status
 ) {
   return {
     id,
     produto,
-    quantidadeProduto,
+    quantidade,
     fornecedor,
     codigoProduto,
     unidadeMedida,
     categoria,
-    status
   };
 }
 
@@ -89,7 +64,6 @@ const rows = [
     "TM123",
     "Unidade",
     "Periféricos",
-    "Entregue"
   ),
   createData(
     2,
@@ -99,7 +73,6 @@ const rows = [
     "MG456",
     "Unidade",
     "Periféricos",
-    "Pendente"
   ),
   createData(
     3,
@@ -109,7 +82,6 @@ const rows = [
     "MN789",
     "Unidade",
     "Monitores",
-    "Cancelado"
   ),
   createData(
     4,
@@ -119,7 +91,6 @@ const rows = [
     "ND321",
     "Unidade",
     "Computadores",
-    "Entregue"
   ),
   createData(
     5,
@@ -129,7 +100,6 @@ const rows = [
     "HG654",
     "Unidade",
     "Áudio",
-    "Cancelado"
   ),
   createData(
     6,
@@ -139,7 +109,6 @@ const rows = [
     "WF987",
     "Unidade",
     "Câmeras",
-    "Cancelado"
   ),
   createData(
     7,
@@ -149,7 +118,6 @@ const rows = [
     "MR654",
     "Unidade",
     "Acessórios",
-    "Cancelado"
   ),
   createData(
     8,
@@ -159,7 +127,6 @@ const rows = [
     "CS123",
     "Unidade",
     "Áudio",
-    "Cancelado"
   ),
   createData(
     9,
@@ -169,7 +136,6 @@ const rows = [
     "AU456",
     "Unidade",
     "Acessórios",
-    "Cancelado"
   ),
   createData(
     10,
@@ -179,7 +145,6 @@ const rows = [
     "DS789",
     "Unidade",
     "Acessórios",
-    "Cancelado"
   ),
 ];
 
@@ -243,8 +208,6 @@ const headCells = [
     disablePadding: false,
     label: "Categoria",
   },
-
-
 ];
 
 function EnhancedTableHead(props) {
@@ -300,16 +263,25 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog }) {
+function EnhancedTableToolbar({ 
+  numSelected, 
+  filter, 
+  setFilter, 
+  handleOpenDialog, 
+  handleCloseDialog, 
+  openDialog, 
+  handleCreateProduct, 
+  handleEditProduct, 
+  handleDeleteProducts 
+}) {
   const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
   const [filterCategory, setFilterCategory] = React.useState("");
 
   const handleFilterDialogOpen = () => setFilterDialogOpen(true);
   const handleFilterDialogClose = () => setFilterDialogOpen(false);
   const applyFilters = () => {
-    // Lógica para aplicar os filtros
     console.log("Filtro aplicado:", { filter, filterCategory });
-    setFilterDialogOpen(false); // Fecha o Dialog após aplicar os filtros
+    setFilterDialogOpen(false); 
   };
 
   return (
@@ -367,20 +339,14 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               },
             }}
           />
-          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} // Abre o Dialog ao clicar
+          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} 
           >Cadastrar Produto</Button>
           <React.Fragment>
             <Dialog open={openDialog} onClose={handleCloseDialog}
               slotProps={{
                 paper: {
                   component: 'form',
-                  onSubmit: (event) => {
-                    event.preventDefault();
-                    const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const email = formJson.email;
-                    console.log(email);
-                  },
+                  onSubmit: handleCreateProduct, 
                 },
               }}
             >
@@ -391,6 +357,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="product-name"
+                  name="produto" 
                   label="Nome do Produto"
                   type="text"
                   fullWidth
@@ -400,6 +367,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="quantity"
+                  name="quantidade" 
                   label="Quantidade"
                   type="number"
                   fullWidth
@@ -409,6 +377,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="supplier"
+                  name="fornecedor" 
                   label="Fornecedor"
                   type="text"
                   fullWidth
@@ -418,18 +387,18 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   required
                   margin="dense"
                   id="product-code"
+                  name="codigoProduto" 
                   label="Código do Produto"
                   type="text"
                   fullWidth
                   variant="outlined"
                 />
-
-                {/* Unidade de Medida como Select */}
                 <FormControl fullWidth margin="dense">
                   <InputLabel id="unit-label">Unidade de Medida</InputLabel>
                   <Select
                     labelId="unit-label"
                     id="unit"
+                    name="unidadeMedida" 
                     label="Unidade de Medida"
                     defaultValue=""
                   >
@@ -439,13 +408,12 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                     <MenuItem value="l">Litros</MenuItem>
                   </Select>
                 </FormControl>
-
-                {/* Categoria como Select */}
                 <FormControl fullWidth margin="dense">
                   <InputLabel id="category-label">Categoria</InputLabel>
                   <Select
                     labelId="category-label"
                     id="category"
+                    name="categoria" 
                     label="Categoria"
                     defaultValue=""
                   >
@@ -455,7 +423,6 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   </Select>
                 </FormControl>
               </DialogContent>
-
               <DialogActions sx={{ mr: 2, mb: 2 }}>
                 <Button variant="outlined" onClick={handleCloseDialog} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
                 <Button variant="contained" type="submit" sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cadastrar</Button>
@@ -467,12 +434,12 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
 
       {numSelected > 0 ? (
         <>
-          <Tooltip title="Editar">
+          <Tooltip title="Editar" onClick={handleEditProduct}>
             <IconButton>
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Excluir">
+          <Tooltip title="Excluir" onClick={handleDeleteProducts}>
             <IconButton>
               <DeleteIcon />
             </IconButton>
@@ -486,7 +453,6 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
             </IconButton>
           </Tooltip>
 
-          {/* Dialog para o filtro */}
           <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
             <DialogTitle>Filtrar Produtos</DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
@@ -523,9 +489,9 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               </FormControl>
 
             </DialogContent>
-            <DialogActions>
-              <Button onClick={handleFilterDialogClose}>Cancelar</Button>
-              <Button onClick={applyFilters}>Aplicar</Button>
+            <DialogActions sx={{mr: 2, mb: 2}}>
+              <Button variant="outlined" onClick={handleFilterDialogClose} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
+              <Button variant="contained" onClick={applyFilters} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
             </DialogActions>
           </Dialog>
         </>
@@ -535,7 +501,6 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
 }
 
 export default function Telaprodutos() {
-
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("produto");
   const [selected, setSelected] = React.useState([]);
@@ -544,8 +509,82 @@ export default function Telaprodutos() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [rows, setRows] = React.useState([]); // Estado para armazenar os dados da API
+  const [snackbar, setSnackbar] = React.useState({ open: false, message: "", severity: "success" });
+
+  // Função para buscar os produtos da API
+  React.useEffect(() => {
+    axios.get("http://localhost:8080/api/produtos")
+      .then((response) => setRows(response.data))
+      .catch((error) => console.error("Erro ao buscar produtos:", error));
+  }, []);
+
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
+
+  // Função para cadastrar um novo produto
+  const handleCreateProduct = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newProduct = Object.fromEntries(formData.entries());
+
+    // Converte quantidade para número
+    newProduct.quantidade = parseInt(newProduct.quantidade, 10);
+
+    axios.post("http://localhost:8080/api/produtos", newProduct)
+      .then((response) => {
+        setRows((prevRows) => [...prevRows, response.data]);
+        handleCloseDialog();
+        setSnackbar({ open: true, message: "Produto cadastrado com sucesso!", severity: "success" });
+      })
+      .catch((error) => {
+        console.error("Erro ao cadastrar produto:", error);
+        setSnackbar({ open: true, message: "Erro ao cadastrar produto.", severity: "error" });
+      });
+  };
+
+  // Função para editar um produto
+  const handleEditProduct = () => {
+    if (selected.length !== 1) {
+      setSnackbar({ open: true, message: "Selecione apenas um produto para editar.", severity: "warning" });
+      return;
+    }
+
+    const productToEdit = rows.find((row) => row.id === selected[0]);
+    const updatedProduct = { ...productToEdit, produto: "Produto Editado" }; // Exemplo de edição
+
+    axios.put(`http://localhost:8080/api/produtos/${selected[0]}`, updatedProduct)
+      .then((response) => {
+        setRows((prevRows) =>
+          prevRows.map((row) => (row.id === selected[0] ? response.data : row))
+        );
+        setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
+        setSelected([]);
+      })
+      .catch((error) => {
+        console.error("Erro ao editar produto:", error);
+        setSnackbar({ open: true, message: "Erro ao editar produto.", severity: "error" });
+      });
+  };
+
+  // Função para excluir produtos
+  const handleDeleteProducts = () => {
+    if (selected.length === 0) {
+      setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
+      return;
+    }
+
+    Promise.all(selected.map((id) => axios.delete(`http://localhost:8080/api/produtos/${id}`)))
+      .then(() => {
+        setRows((prevRows) => prevRows.filter((row) => !selected.includes(row.id)));
+        setSnackbar({ open: true, message: "Produto(s) excluído(s) com sucesso!", severity: "success" });
+        setSelected([]);
+      })
+      .catch((error) => {
+        console.error("Erro ao excluir produto(s):", error);
+        setSnackbar({ open: true, message: "Erro ao excluir produto(s).", severity: "error" });
+      });
+  };
 
   const filteredRows = rows.filter(
     (row) =>
@@ -607,9 +646,12 @@ export default function Telaprodutos() {
           numSelected={selected.length}
           filter={filter}
           setFilter={setFilter}
-          openDialog={openDialog} // Passa o estado do Dialog
-          handleOpenDialog={handleOpenDialog} // Passa a função para abrir o Dialog
-          handleCloseDialog={handleCloseDialog} // Passa a função para fechar o Dialog
+          openDialog={openDialog}
+          handleOpenDialog={handleOpenDialog}
+          handleCloseDialog={handleCloseDialog}
+          handleCreateProduct={handleCreateProduct}
+          handleEditProduct={handleEditProduct} 
+          handleDeleteProducts={handleDeleteProducts} 
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -664,7 +706,7 @@ export default function Telaprodutos() {
                         {row.produto} {/* Produto */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.quantidadeProduto} {/* quantidadeProduto */}
+                        {row.quantidade} {/* quantidade */}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.fornecedor} {/* Fornecedor */}
@@ -699,6 +741,15 @@ export default function Telaprodutos() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
