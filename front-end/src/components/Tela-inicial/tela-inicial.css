@@ -120,18 +120,28 @@
 /* Responsividade para laptops */
 @media (max-width: 1400px ) {
     .container-inicial {
-        width: 90%; 
+        width: 100%; 
         gap: 15px; 
     }
 
+     #atalho{
+        top: 51%;
+        left: 5%;
+     }
+
     .card-estoque {
-        width: 370px; 
+        width: 395px; 
         height: 220px; 
     }
 
     .card-atalho {
-        width: 370px; 
+        width: 395px; 
         height: 220px; 
+    }
+
+    .container-atalho {
+        width: 100%; 
+        gap: 15px; 
     }
 }
 

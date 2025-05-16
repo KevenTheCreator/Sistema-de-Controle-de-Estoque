@@ -9,6 +9,7 @@ import RedefinirSenha from './components/redefinirSenha/redefinirSenha';
 import Telasolicitantes from './components/Tela-solicitantes/tela-solicitantes';
 import TelaSaidas from './components/Tela-saidas/tela-saidas';
 import TelaEntrada from './components/Tela-entradas/tela-entradas';
+import TelaRelatorios from './components/Tela-relatorios/tela-relatorios';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/tela-saidas" element={<TelaSaidas />} />
           <Route path="/tela-entradas" element={<TelaEntrada />} />
           <Route path="/tela-solicitantes" element={<Telasolicitantes />} />
+           <Route path="/tela-relatorios" element={<TelaRelatorios />} />
         </Route>
       </Routes>
     </Router>
