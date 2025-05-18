@@ -31,122 +31,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import axios from "axios"; // Importando axios
-import Snackbar from "@mui/material/Snackbar"; // Para exibir mensagens
-import Alert from "@mui/material/Alert"; // Para estilizar mensagens
-
-function createData(
-  id,
-  produto,
-  quantidade,
-  fornecedor,
-  codigoProduto,
-  unidadeMedida,
-  categoria,
-) {
-  return {
-    id,
-    produto,
-    quantidade,
-    fornecedor,
-    codigoProduto,
-    unidadeMedida,
-    categoria,
-  };
-}
-
-const rows = [
-  createData(
-    1,
-    "Teclado Mecânico",
-    3,
-    "Logitech",
-    "TM123",
-    "Unidade",
-    "Periféricos",
-  ),
-  createData(
-    2,
-    "Mouse Gamer",
-    2,
-    "Razer",
-    "MG456",
-    "Unidade",
-    "Periféricos",
-  ),
-  createData(
-    3,
-    'Monitor 24"',
-    1,
-    "Samsung",
-    "MN789",
-    "Unidade",
-    "Monitores",
-  ),
-  createData(
-    4,
-    "Notebook Dell",
-    5,
-    "Dell",
-    "ND321",
-    "Unidade",
-    "Computadores",
-  ),
-  createData(
-    5,
-    "Headset Gamer",
-    4,
-    "HyperX",
-    "HG654",
-    "Unidade",
-    "Áudio",
-  ),
-  createData(
-    6,
-    "Webcam Full HD",
-    4,
-    "Logitech",
-    "WF987",
-    "Unidade",
-    "Câmeras",
-  ),
-  createData(
-    7,
-    "Mousepad RGB",
-    4,
-    "SteelSeries",
-    "MR654",
-    "Unidade",
-    "Acessórios",
-  ),
-  createData(
-    8,
-    "Caixa de Som Bluetooth",
-    4,
-    "JBL",
-    "CS123",
-    "Unidade",
-    "Áudio",
-  ),
-  createData(
-    9,
-    "Adaptador USB-C",
-    4,
-    "Anker",
-    "AU456",
-    "Unidade",
-    "Acessórios",
-  ),
-  createData(
-    10,
-    "Dock Station",
-    4,
-    "Baseus",
-    "DS789",
-    "Unidade",
-    "Acessórios",
-  ),
-];
+import axios from "axios"; 
+import Snackbar from "@mui/material/Snackbar"; 
+import Alert from "@mui/material/Alert"; 
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -509,10 +396,11 @@ export default function Telaprodutos() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [rows, setRows] = React.useState([]); // Estado para armazenar os dados da API
+  const [rows, setRows] = React.useState([]); 
   const [snackbar, setSnackbar] = React.useState({ open: false, message: "", severity: "success" });
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [editProduct, setEditProduct] = React.useState(null);
 
-  // Função para buscar os produtos da API
   React.useEffect(() => {
     axios.get("http://localhost:8080/api/produtos")
       .then((response) => setRows(response.data))
@@ -522,13 +410,11 @@ export default function Telaprodutos() {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
-  // Função para cadastrar um novo produto
   const handleCreateProduct = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const newProduct = Object.fromEntries(formData.entries());
 
-    // Converte quantidade para número
     newProduct.quantidade = parseInt(newProduct.quantidade, 10);
 
     axios.post("http://localhost:8080/api/produtos", newProduct)
@@ -543,23 +429,35 @@ export default function Telaprodutos() {
       });
   };
 
-  // Função para editar um produto
   const handleEditProduct = () => {
     if (selected.length !== 1) {
       setSnackbar({ open: true, message: "Selecione apenas um produto para editar.", severity: "warning" });
       return;
     }
+    const product = rows.find((row) => row.id === selected[0]);
+    setEditProduct(product);
+    setEditDialogOpen(true);
+  };
 
-    const productToEdit = rows.find((row) => row.id === selected[0]);
-    const updatedProduct = { ...productToEdit, produto: "Produto Editado" }; // Exemplo de edição
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+    setEditProduct(null);
+    setSelected([]);
+  };
 
-    axios.put(`http://localhost:8080/api/produtos/${selected[0]}`, updatedProduct)
+  const handleUpdateProduct = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const updated = Object.fromEntries(formData.entries());
+    updated.quantidade = parseInt(updated.quantidade, 10);
+
+    axios.put(`http://localhost:8080/api/produtos/${editProduct.id}`, updated)
       .then((response) => {
         setRows((prevRows) =>
-          prevRows.map((row) => (row.id === selected[0] ? response.data : row))
+          prevRows.map((row) => (row.id === editProduct.id ? response.data : row))
         );
         setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
-        setSelected([]);
+        handleCloseEditDialog();
       })
       .catch((error) => {
         console.error("Erro ao editar produto:", error);
@@ -567,7 +465,6 @@ export default function Telaprodutos() {
       });
   };
 
-  // Função para excluir produtos
   const handleDeleteProducts = () => {
     if (selected.length === 0) {
       setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
@@ -623,7 +520,6 @@ export default function Telaprodutos() {
         selected.slice(selectedIndex + 1)
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -650,8 +546,8 @@ export default function Telaprodutos() {
           handleOpenDialog={handleOpenDialog}
           handleCloseDialog={handleCloseDialog}
           handleCreateProduct={handleCreateProduct}
-          handleEditProduct={handleEditProduct} 
-          handleDeleteProducts={handleDeleteProducts} 
+          handleEditProduct={handleEditProduct}
+          handleDeleteProducts={handleDeleteProducts}
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -741,6 +637,98 @@ export default function Telaprodutos() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <Dialog open={editDialogOpen} onClose={handleCloseEditDialog}
+        slotProps={{
+          paper: {
+            component: 'form',
+            onSubmit: handleUpdateProduct,
+          },
+        }}
+      >
+        <DialogTitle>Editar Produto</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: "column", width: 600, gap: 3 }}>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="product-name-edit"
+            name="produto"
+            label="Nome do Produto"
+            type="text"
+            fullWidth
+            variant="outlined"
+            defaultValue={editProduct?.produto || ""}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="quantity-edit"
+            name="quantidade"
+            label="Quantidade"
+            type="number"
+            fullWidth
+            variant="outlined"
+            defaultValue={editProduct?.quantidade || ""}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="supplier-edit"
+            name="fornecedor"
+            label="Fornecedor"
+            type="text"
+            fullWidth
+            variant="outlined"
+            defaultValue={editProduct?.fornecedor || ""}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="product-code-edit"
+            name="codigoProduto"
+            label="Código do Produto"
+            type="text"
+            fullWidth
+            variant="outlined"
+            defaultValue={editProduct?.codigoProduto || ""}
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="unit-label-edit">Unidade de Medida</InputLabel>
+            <Select
+              labelId="unit-label-edit"
+              id="unit-edit"
+              name="unidadeMedida"
+              label="Unidade de Medida"
+              defaultValue={editProduct?.unidadeMedida || ""}
+            >
+              <MenuItem value="un">Unidade</MenuItem>
+              <MenuItem value="kg">Kg</MenuItem>
+              <MenuItem value="g">Gramas</MenuItem>
+              <MenuItem value="l">Litros</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="category-label-edit">Categoria</InputLabel>
+            <Select
+              labelId="category-label-edit"
+              id="category-edit"
+              name="categoria"
+              label="Categoria"
+              defaultValue={editProduct?.categoria || ""}
+            >
+              <MenuItem value="perifericos">Periféricos</MenuItem>
+              <MenuItem value="monitores">Monitores</MenuItem>
+              <MenuItem value="computadores">Computadores</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions sx={{ mr: 2, mb: 2 }}>
+          <Button variant="outlined" onClick={handleCloseEditDialog} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
+          <Button variant="contained" type="submit" sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Salvar</Button>
+        </DialogActions>
+      </Dialog>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
