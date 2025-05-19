@@ -159,17 +159,16 @@ function EnhancedTableToolbar({
   openDialog, 
   handleCreateProduct, 
   handleEditProduct, 
-  handleDeleteProducts 
+  handleDeleteProducts,
+  filterField,
+  setFilterField,
+  filterOrder,
+  setFilterOrder,
+  applyFilters
 }) {
   const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
-  const [filterCategory, setFilterCategory] = React.useState("");
-
   const handleFilterDialogOpen = () => setFilterDialogOpen(true);
   const handleFilterDialogClose = () => setFilterDialogOpen(false);
-  const applyFilters = () => {
-    console.log("Filtro aplicado:", { filter, filterCategory });
-    setFilterDialogOpen(false); 
-  };
 
   return (
     <Toolbar
@@ -349,8 +348,8 @@ function EnhancedTableToolbar({
                   labelId="sort-by-label"
                   id="sort-by"
                   label="Ordenar por"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
+                  value={filterField}
+                  onChange={(e) => setFilterField(e.target.value)}
                 >
                   <MenuItem value="produto">Produto</MenuItem>
                   <MenuItem value="quantidade">Quantidade</MenuItem>
@@ -367,18 +366,17 @@ function EnhancedTableToolbar({
                   labelId="classification-order-label"
                   id="classification-order"
                   label="Ordem de classificação"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
+                  value={filterOrder}
+                  onChange={(e) => setFilterOrder(e.target.value)}
                 >
                   <MenuItem value="ascendente">Ascendente</MenuItem>
                   <MenuItem value="descendente">Descendente</MenuItem>
                 </Select>
               </FormControl>
-
             </DialogContent>
             <DialogActions sx={{mr: 2, mb: 2}}>
               <Button variant="outlined" onClick={handleFilterDialogClose} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
-              <Button variant="contained" onClick={applyFilters} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
+              <Button variant="contained" onClick={() => { applyFilters(); handleFilterDialogClose(); }} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
             </DialogActions>
           </Dialog>
         </>
@@ -400,6 +398,8 @@ export default function Telaprodutos() {
   const [snackbar, setSnackbar] = React.useState({ open: false, message: "", severity: "success" });
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const [editProduct, setEditProduct] = React.useState(null);
+  const [filterField, setFilterField] = React.useState("produto");
+  const [filterOrder, setFilterOrder] = React.useState("ascendente");
 
   React.useEffect(() => {
     axios.get("http://localhost:8080/api/produtos")
@@ -489,6 +489,11 @@ export default function Telaprodutos() {
       row.codigoProduto.toLowerCase().includes(filter.toLowerCase())
   );
 
+  const applyFilters = () => {
+    setOrderBy(filterField);
+    setOrder(filterOrder === "ascendente" ? "asc" : "desc");
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -548,6 +553,11 @@ export default function Telaprodutos() {
           handleCreateProduct={handleCreateProduct}
           handleEditProduct={handleEditProduct}
           handleDeleteProducts={handleDeleteProducts}
+          filterField={filterField}
+          setFilterField={setFilterField}
+          filterOrder={filterOrder}
+          setFilterOrder={setFilterOrder}
+          applyFilters={applyFilters}
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
