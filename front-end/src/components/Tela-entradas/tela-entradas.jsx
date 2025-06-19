@@ -1,5 +1,6 @@
 import * as React from "react";
 import { alpha } from "@mui/material/styles";
+import { NumberFormatBase } from "react-number-format";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -34,153 +35,66 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 
-
-function StatusChips({ status }) {
-  const getChipColor = (status) => {
-    switch (status) {
-      case 'Cancelado':
-        return { label: 'Cancelado', color: 'error' }; // vermelho
-      case 'Pendente':
-        return { label: 'Pendente', color: 'warning' }; // laranja
-      case 'Entregue':
-        return { label: 'Entregue', color: 'success' }; // verde
-      default:
-        return { label: status, color: 'default' }; // cinza padrão
-    }
-  };
-
-  const { label, color } = getChipColor(status);
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
 
   return (
-    <Stack direction="row" spacing={1} justifyContent="center">
-      <Chip label={label} color={color} />
-    </Stack>
+    <NumberFormatBase
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.floatValue,
+          },
+        });
+      }}
+      thousandSeparator="."
+      decimalSeparator=","
+      prefix="R$ "
+      decimalScale={2}
+      fixedDecimalScale
+      allowNegative={false}
+    />
   );
 }
 
 function createData(
-  id,
-  produto,
-  quantidadeRec,
-  fornecedor,
+  Id,
+  Produto,
+  QuantidadeRecebida,
+  Fornecedor,
   DataDeEntrada,
-  NumeroDoPedido,
+  NotaFiscal,
+  PrecoUnitario,
   ValorTotal,
   Responsavel
 ) {
   return {
-    id,
-    produto,
-    quantidadeRec,
-    fornecedor,
+    Id,
+    Produto,
+    QuantidadeRecebida,
+    Fornecedor,
     DataDeEntrada,
-    NumeroDoPedido,
+    NotaFiscal,
+    PrecoUnitario,
     ValorTotal,
     Responsavel
   };
 }
 
 const rows = [
-  createData(
-    1,
-    "Teclado Mecânico",
-    3,
-    "Logitech",
-    "24-02-2025",
-    "0001",
-    "R$ 299,00",
-    "Lucas Silva"
-  ),
-  createData(
-    2,
-    "Mouse Gamer",
-    2,
-    "Razer",
-    "25-02-2025",
-    "0002",
-    "R$ 199,00",
-    "Ana Costa"
-  ),
-  createData(
-    3,
-    "Monitor 24\"",
-    1,
-    "Samsung",
-    "26-02-2025",
-    "0003",
-    "R$ 899,00",
-    "Carlos Souza"
-  ),
-  createData(
-    4,
-    "Notebook Dell",
-    5,
-    "Dell",
-    "27-02-2025",
-    "0004",
-    "R$ 4.999,00",
-    "Mariana Lima"
-  ),
-  createData(
-    5,
-    "Headset Gamer",
-    4,
-    "HyperX",
-    "28-02-2025",
-    "0005",
-    "R$ 349,00",
-    "João Pedro"
-  ),
-  createData(
-    6,
-    "Webcam Full HD",
-    2,
-    "Logitech",
-    "01-03-2025",
-    "0006",
-    "R$ 249,00",
-    "Fernanda Alves"
-  ),
-  createData(
-    7,
-    "Mousepad RGB",
-    6,
-    "SteelSeries",
-    "02-03-2025",
-    "0007",
-    "R$ 99,00",
-    "Rafael Silva"
-  ),
-  createData(
-    8,
-    "Caixa de Som Bluetooth",
-    3,
-    "JBL",
-    "03-03-2025",
-    "0008",
-    "R$ 399,00",
-    "Beatriz Santos"
-  ),
-  createData(
-    9,
-    "Adaptador USB-C",
-    10,
-    "Anker",
-    "04-03-2025",
-    "0009",
-    "R$ 79,00",
-    "Gabriel Oliveira"
-  ),
-  createData(
-    10,
-    "Dock Station",
-    2,
-    "Baseus",
-    "05-03-2025",
-    "0010",
-    "R$ 599,00",
-    "Larissa Mendes"
-  ),
+  createData(1, 'Teclado', 10, 'Kabum', '2025-06-19', 'NF12345', 'R$ 50,00', 'R$ 500,00', 'João Silva'),
+  createData(2, 'Mouse', 20, 'Pichau', '2025-06-18', 'NF12346', 'R$ 30,00', 'R$ 600,00', 'Maria Souza'),
+  createData(3, 'Monitor', 5, 'Magazine Luiza', '2025-06-17', 'NF12347', 'R$ 800,00', 'R$ 4.000,00', 'Carlos Lima'),
+  createData(4, 'Notebook', 3, 'Dell', '2025-06-16', 'NF12348', 'R$ 2.500,00', 'R$ 7.500,00', 'Ana Paula'),
+  createData(5, 'Impressora', 2, 'HP', '2025-06-15', 'NF12349', 'R$ 1.200,00', 'R$ 2.400,00', 'Pedro Santos'),
+  createData(6, 'Cabo HDMI', 50, 'Amazon', '2025-06-14', 'NF12350', 'R$ 15,00', 'R$ 750,00', 'Lucas Rocha'),
+  createData(7, 'Pen Drive', 40, 'Multilaser', '2025-06-13', 'NF12351', 'R$ 25,00', 'R$ 1.000,00', 'Fernanda Lima'),
+  createData(8, 'HD Externo', 8, 'Western Digital', '2025-06-12', 'NF12352', 'R$ 350,00', 'R$ 2.800,00', 'Rafael Costa'),
+  createData(9, 'Webcam', 12, 'Logitech', '2025-06-11', 'NF12353', 'R$ 120,00', 'R$ 1.440,00', 'Juliana Alves'),
+  createData(10, 'Headset', 15, 'Sony', '2025-06-10', 'NF12354', 'R$ 80,00', 'R$ 1.200,00', 'Bruno Martins'),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -204,20 +118,20 @@ const headCells = [
   },
 
   {
-    id: "produto",
+    id: "Produto",
     numeric: false,
     disablePadding: false,
     label: "Produto"
   },
   {
-    id: "quantidaRec",
+    id: "QuantidadeRecebida",
     numeric: true,
     disablePadding: false,
-    label: "Quantidade",
+    label: "Quantidade Recebida",
   },
 
   {
-    id: "fornecedor",
+    id: "Fornecedor",
     numeric: false,
     disablePadding: false,
     label: "Fornecedor",
@@ -231,18 +145,26 @@ const headCells = [
   },
 
   {
-    id: "NumeroDoPedido",
+    id: "NotaFiscal",
     numeric: false,
     disablePadding: false,
-    label: "Numero do Pedido",
+    label: "Nota Fiscal",
+  },
+
+  {
+    id: "PrecoUnitario",
+    numeric: false,
+    disablePadding: false,
+    label: "Preço Unitário",
   },
 
   {
     id: "ValorTotal",
-    numeric: false,
+    numeric: true,
     disablePadding: false,
     label: "Valor Total",
   },
+
   {
     id: "Responsavel",
     numeric: false,
@@ -305,18 +227,16 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog }) {
+function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog, unitPrice, handleUnitPriceChange, quantityReceived, setQuantityReceived, totalValue}) {
   const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
   const [filterCategory, setFilterCategory] = React.useState("");
-
   const handleFilterDialogOpen = () => setFilterDialogOpen(true);
   const handleFilterDialogClose = () => setFilterDialogOpen(false);
-  const applyFilters = () => {
-    // Lógica para aplicar os filtros
+  const applyFilters = () => {   
     console.log("Filtro aplicado:", { filter, filterCategory });
-    setFilterDialogOpen(false); // Fecha o Dialog após aplicar os filtros
+    setFilterDialogOpen(false); 
   };
-
+  
   return (
     <Toolbar
       sx={[
@@ -372,7 +292,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               },
             }}
           />
-          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} // Abre o Dialog ao clicar
+          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} 
           >Cadastrar Entrada</Button>
           <React.Fragment>
             <Dialog open={openDialog} onClose={handleCloseDialog}
@@ -395,7 +315,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   autoFocus
                   required
                   margin="dense"
-                  id="product-name"
+                  id="nome-produto"
                   label="Nome do Produto"
                   type="text"
                   fullWidth
@@ -404,16 +324,18 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 <TextField
                   required
                   margin="dense"
-                  id="quantity"
-                  label="QuantidadeRec"
+                  id="quantidade-recebida"
+                  label="Quantidade Recebida"
                   type="number"
                   fullWidth
                   variant="outlined"
+                  value={quantityReceived}
+                  onChange={(e) => setQuantityReceived(e.target.value)}
                 />
                 <TextField
                   required
                   margin="dense"
-                  id="supplier"
+                  id="fornecedor"
                   label="Fornecedor"
                   type="text"
                   fullWidth
@@ -422,8 +344,16 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 <TextField
                   required
                   margin="dense"
-                  id="product-code"
-                  label="Numero do Pedido"
+                  id="data-entrada"
+                  type="date"
+                  fullWidth
+                  variant="outlined"
+                />
+                <TextField
+                  required
+                  margin="dense"
+                  id="nota-fiscal"
+                  label="Nota Fiscal"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -431,11 +361,34 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 <TextField
                   required
                   margin="dense"
-                  id="valor-total"
-                  label="Valor Total"
-                  type="text"
+                  id="preco-unitario"
+                  label="Preco Unitário"
+                  type="number"
+                  value={unitPrice}
+                  onChange={handleUnitPriceChange}
                   fullWidth
                   variant="outlined"
+                  inputProps={{
+                    step: "0.01",
+                    min: "0",
+                    inputComponent: NumberFormatCustom,
+                  }} 
+                />
+                <TextField
+                  required
+                  margin="dense"
+                  id="valor-total"
+                  label="Valor Total"
+                  type="number"
+                  fullWidth
+                  variant="outlined"
+                  value={totalValue}
+                  disabled
+                  inputProps={{
+                    step: "0.01",
+                    min: "0",
+                    inputComponent: NumberFormatCustom,
+                  }} 
                 />
                 <TextField
                   required
@@ -446,37 +399,6 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   fullWidth
                   variant="outlined"
                 />
-
-                {/* Unidade de Medida como Select */}
-                <FormControl fullWidth margin="dense">
-                  <InputLabel id="unit-label">Unidade de Medida</InputLabel>
-                  <Select
-                    labelId="unit-label"
-                    id="unit"
-                    label="Unidade de Medida"
-                    defaultValue=""
-                  >
-                    <MenuItem value="un">Unidade</MenuItem>
-                    <MenuItem value="kg">Kg</MenuItem>
-                    <MenuItem value="g">Gramas</MenuItem>
-                    <MenuItem value="l">Litros</MenuItem>
-                  </Select>
-                </FormControl>
-
-                {/* Categoria como Select */}
-                <FormControl fullWidth margin="dense">
-                  <InputLabel id="category-label">Categoria</InputLabel>
-                  <Select
-                    labelId="category-label"
-                    id="category"
-                    label="Categoria"
-                    defaultValue=""
-                  >
-                    <MenuItem value="perifericos">Periféricos</MenuItem>
-                    <MenuItem value="monitores">Monitores</MenuItem>
-                    <MenuItem value="computadores">Computadores</MenuItem>
-                  </Select>
-                </FormControl>
               </DialogContent>
 
               <DialogActions sx={{ mr: 2, mb: 2 }}>
@@ -509,7 +431,6 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
             </IconButton>
           </Tooltip>
 
-          {/* Dialog para o filtro */}
           <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
             <DialogTitle>Filtrar Entradas</DialogTitle>
             <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
@@ -523,12 +444,13 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
-                  <MenuItem value="produto">Produto</MenuItem>
-                  <MenuItem value="quantidade">Quantidade Rec.</MenuItem>
-                  <MenuItem value="fornecedor">Fornecedor</MenuItem>
-                  <MenuItem value="dataEntrada">Data de Entrada</MenuItem>
-                  <MenuItem value="numeroPedido">Número do Pedido</MenuItem>
-                  <MenuItem value="valorTotal">Valor Total</MenuItem>
+                  <MenuItem value="Produto">Produto</MenuItem>
+                  <MenuItem value="QuantidadeRecebida">Quantidade Recebida</MenuItem>
+                  <MenuItem value="Fornecedor">Fornecedor</MenuItem>
+                  <MenuItem value="DataEntrada">Data de Entrada</MenuItem>
+                  <MenuItem value="NotaFiscal">Número do Pedido</MenuItem>
+                  <MenuItem value="precoUnitario">Preço Unitário</MenuItem>
+                  <MenuItem value="ValorTotal">Valor Total</MenuItem>
                   <MenuItem value="responsavel">Responsável</MenuItem>
                 </Select>
               </FormControl>
@@ -564,6 +486,9 @@ export default function TelaEntrada() {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("produto");
   const [selected, setSelected] = React.useState([]);
+  const [quantityReceived, setQuantityReceived] = React.useState("");
+  const [totalValue, setTotalValue] = React.useState("");
+  const [unitPrice, setUnitPrice] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -574,12 +499,16 @@ export default function TelaEntrada() {
 
   const filteredRows = rows.filter(
     (row) =>
-      row.produto.toLowerCase().includes(filter.toLowerCase()) ||
-      row.fornecedor.toLowerCase().includes(filter.toLowerCase()) ||
+      row.Produto.toLowerCase().includes(filter.toLowerCase()) ||
+      row.Fornecedor.toLowerCase().includes(filter.toLowerCase()) ||
       row.DataDeEntrada.toLowerCase().includes(filter.toLowerCase()) ||
-      row.NumeroDoPedido.toLowerCase().includes(filter.toLowerCase()) ||
+      row.NotaFiscal.toLowerCase().includes(filter.toLowerCase()) ||
       row.Responsavel.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const handleUnitPriceChange = (event) => {
+    setUnitPrice(event.target.value);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -612,7 +541,6 @@ export default function TelaEntrada() {
         selected.slice(selectedIndex + 1)
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -632,12 +560,18 @@ export default function TelaEntrada() {
         sx={{ width: "90%", mb: 2, borderRadius: 2, p: 2, mt: 10, mx: "auto", marginTop: 7 }}
       >
         <EnhancedTableToolbar
+          quantityReceived={quantityReceived}
+          setQuantityReceived={setQuantityReceived}
+          totalValue={totalValue}
+          setTotalValue={setTotalValue}
+          unitPrice={unitPrice}
+          handleUnitPriceChange={handleUnitPriceChange}
           numSelected={selected.length}
           filter={filter}
           setFilter={setFilter}
-          openDialog={openDialog} // Passa o estado do Dialog
-          handleOpenDialog={handleOpenDialog} // Passa a função para abrir o Dialog
-          handleCloseDialog={handleCloseDialog} // Passa a função para fechar o Dialog
+          openDialog={openDialog}
+          handleOpenDialog={handleOpenDialog}
+          handleCloseDialog={handleCloseDialog} 
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -646,6 +580,7 @@ export default function TelaEntrada() {
             size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
+              selected={selected}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -659,17 +594,17 @@ export default function TelaEntrada() {
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  const isItemSelected = isSelected(row.Id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) => handleClick(event, row.Id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={row.Id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -686,28 +621,31 @@ export default function TelaEntrada() {
                         align="center"
                         sx={{ minWidth: 50 }}
                       >
-                        {index + 1} {/* Ordem */}
+                        {index + 1} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.produto} {/* Produto */}
+                        {row.Produto} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.quantidadeRec} {/* quantidadeProduto */}
+                        {row.QuantidadeRecebida} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.fornecedor} {/* Fornecedor */}
+                        {row.Fornecedor} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.DataDeEntrada} {/* Código do Produto */}
+                        {row.DataDeEntrada} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.NumeroDoPedido} {/* Unidade de Medida */}
+                        {row.NotaFiscal} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.ValorTotal} {/* Unidade de Medida */}
+                        {row.PrecoUnitario} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.Responsavel} {/* Categoria */}
+                        {row.ValorTotal} 
+                      </TableCell>
+                      <TableCell align="center" sx={{ minWidth: 150 }}>
+                        {row.Responsavel} 
                       </TableCell>
                     </TableRow>
                   );
@@ -733,3 +671,4 @@ export default function TelaEntrada() {
     </Box>
   );
 }
+
