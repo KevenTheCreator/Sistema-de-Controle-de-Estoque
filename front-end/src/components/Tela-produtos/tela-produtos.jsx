@@ -62,14 +62,14 @@ const headCells = [
     label: "Produto"
   },
   {
-    id: "quantidaProduto",
+    id: "quantidade",
     numeric: true,
     disablePadding: false,
     label: "Quantidade",
   },
 
   {
-    id: "fornecedorId",
+    id: "fornecedor",
     numeric: false,
     disablePadding: false,
     label: "Fornecedor",
@@ -90,7 +90,7 @@ const headCells = [
   },
 
   {
-    id: "categoriaId",
+    id: "categoria",
     numeric: false,
     disablePadding: false,
     label: "Categoria",
@@ -152,6 +152,7 @@ function EnhancedTableHead(props) {
 
 function EnhancedTableToolbar({ 
   numSelected, 
+  selected,
   filter, 
   setFilter, 
   handleOpenDialog, 
@@ -320,15 +321,19 @@ function EnhancedTableToolbar({
 
       {numSelected > 0 ? (
         <>
-          <Tooltip title="Editar" onClick={handleEditProduct}>
-            <IconButton>
-              <EditIcon />
-            </IconButton>
+          <Tooltip title="Editar">
+            <span>
+              <IconButton onClick={handleEditProduct} disabled={selected.length !== 1}>
+                <EditIcon />
+              </IconButton>
+            </span>
           </Tooltip>
-          <Tooltip title="Excluir" onClick={handleDeleteProducts}>
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
+          <Tooltip title="Excluir">
+            <span>
+              <IconButton onClick={handleDeleteProducts} disabled={selected.length === 0}>
+                <DeleteIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         </>
       ) : (
@@ -435,6 +440,10 @@ export default function Telaprodutos() {
       return;
     }
     const product = rows.find((row) => row.id === selected[0]);
+    if (!product) {
+      setSnackbar({ open: true, message: "Produto não encontrado.", severity: "error" });
+      return;
+    }
     setEditProduct(product);
     setEditDialogOpen(true);
   };
@@ -486,7 +495,11 @@ export default function Telaprodutos() {
   const filteredRows = rows.filter(
     (row) =>
       row.produto.toLowerCase().includes(filter.toLowerCase()) ||
-      row.codigoProduto.toLowerCase().includes(filter.toLowerCase())
+      row.quantidade.toLowerCase().includes(filter.toLowerCase()) ||
+      row.fornecedor.toLowerCase().includes(filter.toLowerCase()) ||
+      row.codigoProduto.toLowerCase().includes(filter.toLowerCase()) ||
+      row.unidadeMedida.toLowerCase().includes(filter.toLowerCase()) ||
+      row.categoria.toLowerCase().includes(filter.toLowerCase()) 
   );
 
   const applyFilters = () => {
@@ -545,6 +558,7 @@ export default function Telaprodutos() {
       >
         <EnhancedTableToolbar
           numSelected={selected.length}
+          selected={selected} 
           filter={filter}
           setFilter={setFilter}
           openDialog={openDialog}
@@ -606,25 +620,25 @@ export default function Telaprodutos() {
                         align="center"
                         sx={{ minWidth: 50 }}
                       >
-                        {index + 1} {/* Ordem */}
+                      {index + 1} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.produto} {/* Produto */}
+                        {row.produto} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.quantidade} {/* quantidade */}
+                        {row.quantidade} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.fornecedor} {/* Fornecedor */}
+                        {row.fornecedor} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.codigoProduto} {/* Código do Produto */}
+                        {row.codigoProduto} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.unidadeMedida} {/* Unidade de Medida */}
+                        {row.unidadeMedida} 
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.categoria} {/* Categoria */}
+                        {row.categoria} 
                       </TableCell>
                     </TableRow>
                   );
