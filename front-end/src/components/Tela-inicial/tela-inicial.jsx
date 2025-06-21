@@ -40,7 +40,7 @@ export default function TelaInicial() {
         <h3 className="cardP">PRODUTOS COM ESTOQUE BAIXO</h3>
         <h3 style={{ color: 'black' }}>0</h3>
       </Box>
- 
+
       <Box
         sx={{
           width: { xs: '100%', md: '48%', lg: '30%' },
@@ -102,7 +102,7 @@ export default function TelaInicial() {
         }}
       >
         <WidgetsIcon sx={{ className: "card-estoque", fontSize: 70, color: "black", position: 'relative', bottom: 7 }} />
-        <h3 className="atalhoP">PRODUTOS</h3>
+        <Link to={"/tela-produtos "} style={{ textDecoration: 'none' }}><h3 className="atalhoP">PRODUTOS</h3></Link>
       </Box>
 
       <Box
@@ -122,7 +122,7 @@ export default function TelaInicial() {
         }}
       >
         <Diversity3Icon sx={{ className: "card-estoque", fontSize: 70, color: "black", position: 'relative' }} />
-        <h3 className="atalhoS">SOLICITANTES</h3>
+        <Link to={"/tela-solicitantes "} style={{ textDecoration: 'none' }}> <h3 className="atalhoS">SOLICITANTES</h3></Link>
       </Box>
 
       <Box
@@ -141,8 +141,8 @@ export default function TelaInicial() {
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
         }}
       >
-       <LocalShippingIcon sx={{ className: "card-estoque", fontSize: 70, color: "black", position: 'relative', bottom: 7 }} />
-        <h3 className="atalhoE">ENTRADAS</h3>
+        <LocalShippingIcon sx={{ className: "card-estoque", fontSize: 70, color: "black", position: 'relative', bottom: 7 }} />
+         <Link to={"/tela-entradas "} style={{ textDecoration: 'none' }}><h3 className="atalhoE">ENTRADAS</h3></Link>
       </Box>
     </Box>
   );
