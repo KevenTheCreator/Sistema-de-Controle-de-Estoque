@@ -55,7 +55,7 @@ const Entradas = (event) => {
 }
 const Saidas = (event) => {
   event.preventDefault();
-  window.location.href = '/tela-saas';
+  window.location.href = '/tela-saidas';
 }
 
 
