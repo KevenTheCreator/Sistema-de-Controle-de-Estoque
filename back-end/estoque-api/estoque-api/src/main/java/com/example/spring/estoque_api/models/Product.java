@@ -17,21 +17,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String produto;
 
-    @Column(nullable = false)
     private int quantidade;
 
-    @Column(nullable = false)
     private String fornecedor;
 
-    @Column(nullable = false)
     private String codigoProduto;
 
-    @Column(nullable = false)
     private String unidadeMedida;
 
-    @Column(nullable = false)
     private String categoria;
 }

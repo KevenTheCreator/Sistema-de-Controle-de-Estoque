@@ -28,7 +28,6 @@ public class Dispatch {
     @Column (nullable = false)
     private LocalDate dataSaida;
 
-    @Column (nullable = true)
     private LocalDate dataDevolucao;
 
     @Column (nullable = false)
