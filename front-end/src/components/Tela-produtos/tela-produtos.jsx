@@ -61,6 +61,7 @@ const headCells = [
     disablePadding: false,
     label: "Produto"
   },
+
   {
     id: "quantidade",
     numeric: true,
@@ -160,16 +161,8 @@ function EnhancedTableToolbar({
   openDialog, 
   handleCreateProduct, 
   handleEditProduct, 
-  handleDeleteProducts,
-  filterField,
-  setFilterField,
-  filterOrder,
-  setFilterOrder,
-  applyFilters
+  handleDeleteProducts
 }) {
-  const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
-  const handleFilterDialogOpen = () => setFilterDialogOpen(true);
-  const handleFilterDialogClose = () => setFilterDialogOpen(false);
 
   return (
     <Toolbar
@@ -337,54 +330,7 @@ function EnhancedTableToolbar({
           </Tooltip>
         </>
       ) : (
-        <>
-          <Tooltip title="Filtrar lista">
-            <IconButton onClick={handleFilterDialogOpen}>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
-            <DialogTitle>Filtrar Produtos</DialogTitle>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="sort-by-label">Ordenar por</InputLabel>
-                <Select
-                  labelId="sort-by-label"
-                  id="sort-by"
-                  label="Ordenar por"
-                  value={filterField}
-                  onChange={(e) => setFilterField(e.target.value)}
-                >
-                  <MenuItem value="produto">Produto</MenuItem>
-                  <MenuItem value="quantidade">Quantidade</MenuItem>
-                  <MenuItem value="fornecedor">Fornecedor</MenuItem>
-                  <MenuItem value="codigoProduto">Código do Produto</MenuItem>
-                  <MenuItem value="unidadeMedida">Unidade de Medida</MenuItem>
-                  <MenuItem value="categoria">Categoria</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="classification-order-label">Ordem de classificação</InputLabel>
-                <Select
-                  labelId="classification-order-label"
-                  id="classification-order"
-                  label="Ordem de classificação"
-                  value={filterOrder}
-                  onChange={(e) => setFilterOrder(e.target.value)}
-                >
-                  <MenuItem value="ascendente">Ascendente</MenuItem>
-                  <MenuItem value="descendente">Descendente</MenuItem>
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions sx={{mr: 2, mb: 2}}>
-              <Button variant="outlined" onClick={handleFilterDialogClose} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
-              <Button variant="contained" onClick={() => { applyFilters(); handleFilterDialogClose(); }} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
-            </DialogActions>
-          </Dialog>
-        </>
+        ""
       )}
     </Toolbar>
   );
@@ -392,7 +338,7 @@ function EnhancedTableToolbar({
 
 export default function Telaprodutos() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("produto");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
@@ -523,22 +469,11 @@ export default function Telaprodutos() {
   };
 
   const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
+    setSelected((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((selectedId) => selectedId !== id)
+        : [...prevSelected, id]
+    );
   };
 
   const handleChangePage = (event, newPage) => setPage(newPage);

@@ -16,13 +16,12 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import SearchIcon from '@mui/icons-material/Search';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
@@ -37,14 +36,17 @@ import MenuItem from "@mui/material/MenuItem";
 function StatusChips({ status }) {
   const getChipColor = (status) => {
     switch (status) {
-      case 'Cancelado':
-        return { label: 'Cancelado', color: 'error' }; // vermelho
-      case 'Pendente':
-        return { label: 'Pendente', color: 'warning' }; // laranja
-      case 'Entregue':
-        return { label: 'Entregue', color: 'success' }; // verde
+      case "Cancelado":
+        return { label: "Cancelado", color: "error" }; 
+
+      case "Pendente":
+        return { label: "Pendente", color: "warning" }; 
+
+      case "Entregue":
+        return { label: "Entregue", color: "success" }; 
+
       default:
-        return { label: status, color: 'default' }; // cinza padrão
+        return { label: status, color: "default" }; 
     }
   };
 
@@ -60,24 +62,24 @@ function StatusChips({ status }) {
 function createData(
   id,
   produto,
-  quantidadeRet,
+  quantidadeRetirada,
   dataSaida,
+  dataDevolucao,
   nomeSolicitante,
   tipoSolicitante,
   destino,
-  DataDevolucao,
   status
 ) {
   return {
     id,
     produto,
-    quantidadeRet,
+    quantidadeRetirada,
     dataSaida,
+    dataDevolucao,
     nomeSolicitante,
     tipoSolicitante,
     destino,
-    DataDevolucao,
-    status
+    status,
   };
 }
 const rows = [
@@ -86,10 +88,10 @@ const rows = [
     "Teclado Mecânico",
     3,
     "2025-03-15",
+    "2025-04-15",
     "Cleber",
     "Funcionário",
     "Casa",
-    "2025-04-15",
     "Entregue"
   ),
   createData(
@@ -97,21 +99,21 @@ const rows = [
     "Mouse Gamer",
     2,
     "2025-03-20",
+    "2025-04-20",
     "Ana",
     "Docente",
     "Escritório",
-    "2025-04-20",
     "Pendente"
   ),
   createData(
     3,
-    "Monitor 24\"",
+    'Monitor 24"',
     1,
     "2025-03-25",
+    "2025-04-25",
     "Carlos",
     "Funcionário",
     "Sala de Reunião",
-    "2025-04-25",
     "Cancelado"
   ),
   createData(
@@ -119,10 +121,10 @@ const rows = [
     "Notebook Dell",
     5,
     "2025-03-30",
+    "2025-04-30",
     "Mariana",
     "Funcionário",
     "Laboratório",
-    "2025-04-30",
     "Entregue"
   ),
   createData(
@@ -130,10 +132,10 @@ const rows = [
     "Headset Gamer",
     4,
     "2025-04-01",
+    "2025-05-01",
     "João",
     "Docente",
     "Auditório",
-    "2025-05-01",
     "Cancelado"
   ),
   createData(
@@ -141,10 +143,10 @@ const rows = [
     "Webcam Full HD",
     2,
     "2025-04-05",
+    "2025-05-05",
     "Fernanda",
     "Docente",
     "Sala de Aula",
-    "2025-05-05",
     "Pendente"
   ),
   createData(
@@ -152,10 +154,10 @@ const rows = [
     "Mousepad RGB",
     6,
     "2025-04-10",
+    "2025-05-10",
     "Lucas",
     "Discente",
     "Biblioteca",
-    "2025-05-10",
     "Entregue"
   ),
   createData(
@@ -163,10 +165,10 @@ const rows = [
     "Caixa de Som Bluetooth",
     3,
     "2025-04-15",
+    "2025-05-15",
     "Beatriz",
     "Discente",
     "Sala de Estudos",
-    "2025-05-15",
     "Cancelado"
   ),
   createData(
@@ -174,10 +176,10 @@ const rows = [
     "Adaptador USB-C",
     10,
     "2025-04-20",
+    "2025-05-20",
     "Gabriel",
     "Discente",
     "Laboratório de Informática",
-    "2025-05-20",
     "Entregue"
   ),
   createData(
@@ -185,10 +187,10 @@ const rows = [
     "Dock Station",
     2,
     "2025-04-25",
+    "2025-05-25",
     "Larissa",
     "Funcionário",
     "Escritório",
-    "2025-05-25",
     "Pendente"
   ),
 ];
@@ -206,14 +208,27 @@ function getComparator(order, orderBy) {
 }
 
 const headCells = [
-  { id: "ord", numeric: false, disablePadding: true, label: "Ordem" },
-  { id: "produto", numeric: false, disablePadding: false, label: "Produto" },
   {
-    id: "quantidadeRet",
+    id: "ord",
+    numeric: false,
+    disablePadding: true,
+    label: "Ordem"
+  },
+
+  {
+    id: "produto",
+    numeric: false,
+    disablePadding: false,
+    label: "Produto"
+  },
+
+  {
+    id: "quantidadeRetirada",
     numeric: true,
     disablePadding: false,
     label: "Quantidade Retirada",
   },
+
   {
     id: "dataSaida",
     numeric: false,
@@ -222,32 +237,39 @@ const headCells = [
   },
 
   {
+    id: "dataDevolucao",
+    numeric: false,
+    disablePadding: false,
+    label: "Data de Devolução",
+  },
+
+  {
     id: "nomeSolicitante",
     numeric: false,
     disablePadding: false,
     label: "Nome do Solicitante",
-  },  
+  },
+
   {
     id: "tipoSolicitante",
     numeric: false,
     disablePadding: false,
     label: "Tipo de Solicitante",
   },
+
   {
     id: "destino",
     numeric: false,
     disablePadding: false,
     label: "Destino",
   },
+
   {
-    id: "DataDevolucao",
+    id: "status",
     numeric: false,
     disablePadding: false,
-    label: "Data de Devolução",
+    label: "Status"
   },
-
-  
-  { id: "status", numeric: false, disablePadding: false, label: "Status" },
 ];
 
 function EnhancedTableHead(props) {
@@ -303,16 +325,14 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog, handleCloseDialog, openDialog }) {
-  const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
-  const [filterCategory, setFilterCategory] = React.useState("");
-  const handleFilterDialogOpen = () => setFilterDialogOpen(true);
-  const handleFilterDialogClose = () => setFilterDialogOpen(false);
-  const applyFilters = () => {
-    // Lógica para aplicar os filtros
-    console.log("Filtro aplicado:", { filter, filterCategory });
-    setFilterDialogOpen(false); // Fecha o Dialog após aplicar os filtros
-  };
+function EnhancedTableToolbar({
+  numSelected,
+  filter,
+  setFilter,
+  handleOpenDialog,
+  handleCloseDialog,
+  openDialog,
+}) {
 
   return (
     <Toolbar
@@ -338,12 +358,21 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
       ]}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ width: "100%", fontFamily: "Montserrat" }} color="inherit" variant="subtitle1">
+        <Typography
+          sx={{ width: "100%", fontFamily: "Montserrat" }}
+          color="inherit"
+          variant="subtitle1"
+        >
           {numSelected} selecionado(s)
         </Typography>
       ) : (
         <>
-          <Typography variant="h6" color="black" align="left" sx={{ fontFamily: "Montserrat", fontWeight: 700 }}>
+          <Typography
+            variant="h6"
+            color="black"
+            align="left"
+            sx={{ fontFamily: "Montserrat", fontWeight: 700 }}
+          >
             SAÍDAS
           </Typography>
 
@@ -369,13 +398,26 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               },
             }}
           />
-          <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} // Abre o Dialog ao clicar
-          >Cadastrar Saída</Button>
+          <Button
+            variant="contained"
+            startIcon={<AddCircleIcon />}
+            sx={{
+              height: 39,
+              fontWeight: 700,
+              fontFamily: "Montserrat",
+              boxShadow: 0,
+            }}
+            onClick={handleOpenDialog} 
+          >
+            Cadastrar Saída
+          </Button>
           <React.Fragment>
-            <Dialog open={openDialog} onClose={handleCloseDialog}
+            <Dialog
+              open={openDialog}
+              onClose={handleCloseDialog}
               slotProps={{
                 paper: {
-                  component: 'form',
+                  component: "form",
                   onSubmit: (event) => {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
@@ -387,12 +429,19 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
               }}
             >
               <DialogTitle>Cadastrar Saída</DialogTitle>
-              <DialogContent sx={{ display: 'flex', flexDirection: "column", width: 600, gap: 3 }}>
+              <DialogContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: 600,
+                  gap: 3,
+                }}
+              >
                 <TextField
                   autoFocus
                   required
                   margin="dense"
-                  id="product-name"
+                  id="nome-produto"
                   label="Nome do Produto"
                   type="text"
                   fullWidth
@@ -401,8 +450,8 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 <TextField
                   required
                   margin="dense"
-                  id="quantity"
-                  label="QuantidadeRec"
+                  id="quantidade-retirada"
+                  label="Quantidade Retirada"
                   type="number"
                   fullWidth
                   variant="outlined"
@@ -410,75 +459,90 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
                 <TextField
                   required
                   margin="dense"
-                  id="supplier"
-                  label="Fornecedor"
-                  type="text"
+                  id="data-saida"
+                  type="date"
+                  label="Data de Saída"
                   fullWidth
                   variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  margin="dense"
+                  id="data-devolucao"
+                  type="date"
+                  label="Data de Devolução"
+                  fullWidth
+                  variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
                 <TextField
                   required
                   margin="dense"
-                  id="product-code"
-                  label="Numero do Pedido"
+                  id="nome-solicitante"
+                  label="Nome do Solicitante"
                   type="text"
                   fullWidth
                   variant="outlined"
                 />
-                <TextField
-                  required
-                  margin="dense"
-                  id="valor-total"
-                  label="Valor Total"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                />
-                <TextField
-                  required
-                  margin="dense"
-                  id="responsavel"
-                  label="Responsável"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                />
-
-                {/* Unidade de Medida como Select */}
                 <FormControl fullWidth margin="dense">
-                  <InputLabel id="unit-label">Unidade de Medida</InputLabel>
+                  <InputLabel id="tipo-solicitante-label" required>
+                    Tipo de Solicitante
+                  </InputLabel>
                   <Select
-                    labelId="unit-label"
-                    id="unit"
-                    label="Unidade de Medida"
+                    labelId="tipo-solicitante-label"
+                    id="tipo-solicitante"
+                    label="Tipo de Solicitante"
                     defaultValue=""
                   >
-                    <MenuItem value="un">Unidade</MenuItem>
-                    <MenuItem value="kg">Kg</MenuItem>
-                    <MenuItem value="g">Gramas</MenuItem>
-                    <MenuItem value="l">Litros</MenuItem>
+                    <MenuItem value="funcionario">Funcionário</MenuItem>
+                    <MenuItem value="discente">Discente</MenuItem>
+                    <MenuItem value="docente">Docente</MenuItem>
                   </Select>
                 </FormControl>
 
                 {/* Categoria como Select */}
                 <FormControl fullWidth margin="dense">
-                  <InputLabel id="category-label">Categoria</InputLabel>
+                  <InputLabel id="destino-label" required>Destino</InputLabel>
                   <Select
-                    labelId="category-label"
-                    id="category"
-                    label="Categoria"
+                    labelId="destino-label"
+                    id="destino"
+                    label="Destino"
                     defaultValue=""
                   >
-                    <MenuItem value="perifericos">Periféricos</MenuItem>
-                    <MenuItem value="monitores">Monitores</MenuItem>
-                    <MenuItem value="computadores">Computadores</MenuItem>
+                    <MenuItem value="laboratorio">Laboratório</MenuItem>
+                    <MenuItem value="escritorio">Escritório</MenuItem>
+                    <MenuItem value="galpao">Galpão</MenuItem>
                   </Select>
                 </FormControl>
               </DialogContent>
 
               <DialogActions sx={{ mr: 2, mb: 2 }}>
-                <Button variant="outlined" onClick={handleCloseDialog} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
-                <Button variant="contained" type="submit" sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cadastrar</Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleCloseDialog}
+                  sx={{
+                    fontWeight: 700,
+                    fontFamily: "Montserrat",
+                    boxShadow: 0,
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  sx={{
+                    fontWeight: 700,
+                    fontFamily: "Montserrat",
+                    boxShadow: 0,
+                  }}
+                >
+                  Cadastrar
+                </Button>
               </DialogActions>
             </Dialog>
           </React.Fragment>
@@ -499,58 +563,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
           </Tooltip>
         </>
       ) : (
-        <>
-          <Tooltip title="Filtrar lista">
-            <IconButton onClick={handleFilterDialogOpen}>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-
-          {/* Dialog para o filtro */}
-          <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
-            <DialogTitle>Filtrar Saídas</DialogTitle>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: 400 }}>
-
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="order-by-label">Ordenar por</InputLabel>
-                <Select
-                  labelId="order-by-label"
-                  id="order-by"
-                  label="Ordenar por"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                >
-                  <MenuItem value="produto">Produto</MenuItem>
-                  <MenuItem value="quantidade">Quantidade Rec.</MenuItem>
-                  <MenuItem value="fornecedor">Fornecedor</MenuItem>
-                  <MenuItem value="dataEntrada">Data de Entrada</MenuItem>
-                  <MenuItem value="numeroPedido">Número do Pedido</MenuItem>
-                  <MenuItem value="valorTotal">Valor Total</MenuItem>
-                  <MenuItem value="responsavel">Responsável</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="sort-direction-label">Ordem de Classificação</InputLabel>
-                <Select
-                  labelId="sort-direction-label"
-                  id="sort-direction"
-                  label="Ordem de Classificação"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                >
-                  <MenuItem value="ascendente">Ascendente</MenuItem>
-                  <MenuItem value="descendente">Descendente</MenuItem>
-                </Select>
-              </FormControl>
-
-            </DialogContent>
-            <DialogActions sx={{ mr: 2, mb: 2 }}>
-              <Button variant="outlined" onClick={handleFilterDialogClose} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Cancelar</Button>
-              <Button variant="contained" onClick={applyFilters} sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}>Aplicar</Button>
-            </DialogActions>
-          </Dialog>
-        </>
+        ""
       )}
     </Toolbar>
   );
@@ -558,7 +571,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter, handleOpenDialog
 
 export default function TelaSaidas() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("produto");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
@@ -594,23 +607,11 @@ export default function TelaSaidas() {
   };
 
   const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
+    setSelected((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((selectedId) => selectedId !== id)
+        : [...prevSelected, id]
+    );
   };
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -626,15 +627,23 @@ export default function TelaSaidas() {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper
-        sx={{ width: "90%", mb: 2, borderRadius: 2, p: 2, mt: 10, mx: "auto", marginTop: 7 }}
+        sx={{
+          width: "90%",
+          mb: 2,
+          borderRadius: 2,
+          p: 2,
+          mt: 10,
+          mx: "auto",
+          marginTop: 7,
+        }}
       >
         <EnhancedTableToolbar
           numSelected={selected.length}
           filter={filter}
           setFilter={setFilter}
-          openDialog={openDialog} // Passa o estado do Dialog
-          handleOpenDialog={handleOpenDialog} // Passa a função para abrir o Dialog
-          handleCloseDialog={handleCloseDialog} // Passa a função para fechar o Dialog
+          openDialog={openDialog} 
+          handleOpenDialog={handleOpenDialog} 
+          handleCloseDialog={handleCloseDialog} 
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -689,10 +698,13 @@ export default function TelaSaidas() {
                         {row.produto}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                        {row.quantidadeRet}
+                        {row.quantidadeRetirada}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 120 }}>
                         {row.dataSaida}
+                      </TableCell>
+                      <TableCell align="center" sx={{ minWidth: 150 }}>
+                        {row.dataDevolucao}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 120 }}>
                         {row.nomeSolicitante}
@@ -703,11 +715,8 @@ export default function TelaSaidas() {
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.destino}
                       </TableCell>
-                      <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.DataDevolucao}
-                      </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                       <StatusChips status={row.status} />
+                        <StatusChips status={row.status} />
                       </TableCell>
                     </TableRow>
                   );

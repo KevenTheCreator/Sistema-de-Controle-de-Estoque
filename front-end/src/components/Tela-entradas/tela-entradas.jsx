@@ -17,7 +17,6 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
@@ -28,10 +27,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
@@ -206,14 +201,6 @@ function EnhancedTableToolbar({
   onDelete,
   selected,
 }) {
-  const [filterDialogOpen, setFilterDialogOpen] = React.useState(false);
-  const [filterCategory, setFilterCategory] = React.useState("");
-  const handleFilterDialogOpen = () => setFilterDialogOpen(true);
-  const handleFilterDialogClose = () => setFilterDialogOpen(false);
-  const applyFilters = () => {
-    console.log("Filtro aplicado:", { filter, filterCategory });
-    setFilterDialogOpen(false);
-  };
 
   return (
     <Toolbar
@@ -451,79 +438,7 @@ function EnhancedTableToolbar({
           </Tooltip>
         </>
       ) : (
-        <>
-          <Tooltip title="Filtrar lista">
-            <IconButton onClick={handleFilterDialogOpen}>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-
-          <Dialog open={filterDialogOpen} onClose={handleFilterDialogClose}>
-            <DialogTitle>Filtrar Entradas</DialogTitle>
-            <DialogContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                width: 400,
-              }}
-            >
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="order-by-label">Ordenar por</InputLabel>
-                <Select
-                  labelId="order-by-label"
-                  id="order-by"
-                  label="Ordenar por"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                >
-                  <MenuItem value="Produto">Produto</MenuItem>
-                  <MenuItem value="QuantidadeRecebida">
-                    Quantidade Recebida
-                  </MenuItem>
-                  <MenuItem value="Fornecedor">Fornecedor</MenuItem>
-                  <MenuItem value="DataEntrada">Data de Entrada</MenuItem>
-                  <MenuItem value="NotaFiscal">Número do Pedido</MenuItem>
-                  <MenuItem value="precoUnitario">Preço Unitário</MenuItem>
-                  <MenuItem value="ValorTotal">Valor Total</MenuItem>
-                  <MenuItem value="responsavel">Responsável</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl fullWidth margin="dense">
-                <InputLabel id="sort-direction-label">
-                  Ordem de Classificação
-                </InputLabel>
-                <Select
-                  labelId="sort-direction-label"
-                  id="sort-direction"
-                  label="Ordem de Classificação"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                >
-                  <MenuItem value="ascendente">Ascendente</MenuItem>
-                  <MenuItem value="descendente">Descendente</MenuItem>
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions sx={{ mr: 2, mb: 2 }}>
-              <Button
-                variant="outlined"
-                onClick={handleFilterDialogClose}
-                sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}
-              >
-                Cancelar
-              </Button>
-              <Button
-                variant="contained"
-                onClick={applyFilters}
-                sx={{ fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }}
-              >
-                Aplicar
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
+        ""
       )}
     </Toolbar>
   );
@@ -531,7 +446,7 @@ function EnhancedTableToolbar({
 
 export default function TelaEntrada() {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("produto");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [quantityReceived, setQuantityReceived] = React.useState("");
   const [totalValue, setTotalValue] = React.useState("");
@@ -682,22 +597,11 @@ export default function TelaEntrada() {
   };
 
   const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
+    setSelected((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((selectedId) => selectedId !== id)
+        : [...prevSelected, id]
+    );
   };
 
   const handleChangePage = (event, newPage) => setPage(newPage);
