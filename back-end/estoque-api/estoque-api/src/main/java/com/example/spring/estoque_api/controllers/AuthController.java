@@ -30,6 +30,7 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<Object> forgotPassword(@RequestBody @Valid ForgotPasswordDTO data){
         authorizationService.forgotPassword(data);
+        //Fazer verificacao automatica de email cadastrado
         return ResponseEntity.ok("Se o email estiver registrado, você receberá um link para redefinir sua senha");
     }
 
