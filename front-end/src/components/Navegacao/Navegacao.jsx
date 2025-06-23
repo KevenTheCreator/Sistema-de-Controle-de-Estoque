@@ -99,10 +99,10 @@ export default function Navegacao() {
       <AppBar position="static" sx={{ background: "rgba(255, 255, 255, 0)", boxShadow: 'none', mt: 3.5, "&MuiPaper-root": { width: "90%" } }} >
         <Container maxWidth="xxl" sx={{ backgroundColor: "#222D3C", borderRadius: 3, boxShadow: "10", padding: 2, width: "90%" }}>
           <Toolbar disableGutters>
+            
             <Typography
               variant="h6"
               noWrap
-              component="a"
               href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
@@ -114,8 +114,9 @@ export default function Navegacao() {
                 textDecoration: 'none',
               }}
             >
-              <Link to={"/tela-inicial"}><img className="logo-header" src="/logo-principal.png" alt="" /></Link>
+              <Link to={"/tela-inicial"}><img className="logo-header" src="/logo-principal.png" alt=""/></Link>
             </Typography>
+            
             
             {/* Menu mobile */}
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', custom970: 'none' } }}>
@@ -156,7 +157,6 @@ export default function Navegacao() {
             <Typography
               variant="h5"
               noWrap
-              component="a"
               href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
@@ -169,7 +169,7 @@ export default function Navegacao() {
                 textDecoration: 'none',
               }}
             >
-              <img className="logo-header" src="/logo-principal.png" alt="" />
+              <Link to={"/tela-inicial"}><img className="logo-header" src="/logo-principal.png" alt=""/></Link>
             </Typography>
 
             {/* Menu desktop */}
