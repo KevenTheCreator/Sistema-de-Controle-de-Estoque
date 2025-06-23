@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
@@ -30,7 +30,6 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<Object> forgotPassword(@RequestBody @Valid ForgotPasswordDTO data){
         authorizationService.forgotPassword(data);
-        //Fazer verificacao automatica de email cadastrado
         return ResponseEntity.ok("Se o email estiver registrado, você receberá um link para redefinir sua senha");
     }
 

@@ -18,27 +18,19 @@ public class Entry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String produto;
 
-    @Column(nullable = false)
     private int quantidadeRecebida;
 
-    @Column(nullable = false)
     private String fornecedor;
 
-    @Column(nullable = false)
     private LocalDate dataDeEntrada;
 
-    @Column(nullable = false)
     private String notaFiscal;
 
-    @Column(nullable = false)
     private Double precoUnitario;
 
-    @Column(nullable = false)
     private Double valorTotal;
 
-    @Column(nullable = false)
     private String responsavel;
 }
