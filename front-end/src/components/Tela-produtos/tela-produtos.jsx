@@ -16,7 +16,6 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import TextField from "@mui/material/TextField";
 import SearchIcon from '@mui/icons-material/Search';
@@ -31,9 +30,10 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import axios from "axios"; 
+import axios from "../../api/axiosConfig";
 import Snackbar from "@mui/material/Snackbar"; 
 import Alert from "@mui/material/Alert"; 
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -352,33 +352,33 @@ export default function Telaprodutos() {
   const [filterField, setFilterField] = React.useState("produto");
   const [filterOrder, setFilterOrder] = React.useState("ascendente");
 
-  React.useEffect(() => {
-    axios.get("http://localhost:8080/api/produtos")
-      .then((response) => setRows(response.data))
-      .catch((error) => console.error("Erro ao buscar produtos:", error));
-  }, []);
+ React.useEffect(() => {
+  axios.get('/produtos')  
+    .then((response) => setRows(response.data))
+    .catch(() => {
+      setSnackbar({ open: true, message: "Erro ao carregar produtos.", severity: "error" });
+    });
+}, []);
 
-  const handleOpenDialog = () => setOpenDialog(true);
-  const handleCloseDialog = () => setOpenDialog(false);
+const handleOpenDialog = () => setOpenDialog(true);
+const handleCloseDialog = () => setOpenDialog(false);
 
-  const handleCreateProduct = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const newProduct = Object.fromEntries(formData.entries());
+const handleCreateProduct = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  const newProduct = Object.fromEntries(formData.entries());
+  newProduct.quantidade = parseInt(newProduct.quantidade, 10);
 
-    newProduct.quantidade = parseInt(newProduct.quantidade, 10);
-
-    axios.post("http://localhost:8080/api/produtos", newProduct)
-      .then((response) => {
-        setRows((prevRows) => [...prevRows, response.data]);
-        handleCloseDialog();
-        setSnackbar({ open: true, message: "Produto cadastrado com sucesso!", severity: "success" });
-      })
-      .catch((error) => {
-        console.error("Erro ao cadastrar produto:", error);
-        setSnackbar({ open: true, message: "Erro ao cadastrar produto.", severity: "error" });
-      });
-  };
+  axios.post('/produtos', newProduct)
+    .then((response) => {
+      setRows((prevRows) => [...prevRows, response.data]);
+      handleCloseDialog();
+      setSnackbar({ open: true, message: "Produto cadastrado com sucesso!", severity: "success" });
+    })
+    .catch(() => {
+      setSnackbar({ open: true, message: "Erro ao cadastrar produto.", severity: "error" });
+    });
+};
 
   const handleEditProduct = () => {
     if (selected.length !== 1) {
@@ -394,49 +394,48 @@ export default function Telaprodutos() {
     setEditDialogOpen(true);
   };
 
-  const handleCloseEditDialog = () => {
-    setEditDialogOpen(false);
-    setEditProduct(null);
-    setSelected([]);
+    const handleCloseEditDialog = () => {
+      setEditDialogOpen(false);
+      setEditProduct(null);
+      setSelected([]);
   };
 
-  const handleUpdateProduct = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const updated = Object.fromEntries(formData.entries());
-    updated.quantidade = parseInt(updated.quantidade, 10);
+const handleUpdateProduct = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  const updated = Object.fromEntries(formData.entries());
+  updated.quantidade = parseInt(updated.quantidade, 10);
 
-    axios.put(`http://localhost:8080/api/produtos/${editProduct.id}`, updated)
-      .then((response) => {
-        setRows((prevRows) =>
-          prevRows.map((row) => (row.id === editProduct.id ? response.data : row))
-        );
-        setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
-        handleCloseEditDialog();
-      })
-      .catch((error) => {
-        console.error("Erro ao editar produto:", error);
-        setSnackbar({ open: true, message: "Erro ao editar produto.", severity: "error" });
-      });
-  };
+  axios.put(`/produtos/${editProduct.id}`, updated)
+    .then((response) => {
+      setRows((prevRows) =>
+        prevRows.map((row) => (row.id === editProduct.id ? response.data : row))
+      );
+      setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
+      handleCloseEditDialog();
+    })
+    .catch(() => {
+      setSnackbar({ open: true, message: "Erro ao editar produto.", severity: "error" });
+    });
+};
 
-  const handleDeleteProducts = () => {
-    if (selected.length === 0) {
-      setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
-      return;
-    }
+const handleDeleteProducts = () => {
+  if (selected.length === 0) {
+    setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
+    return;
+  }
 
-    Promise.all(selected.map((id) => axios.delete(`http://localhost:8080/api/produtos/${id}`)))
-      .then(() => {
-        setRows((prevRows) => prevRows.filter((row) => !selected.includes(row.id)));
-        setSnackbar({ open: true, message: "Produto(s) excluído(s) com sucesso!", severity: "success" });
-        setSelected([]);
-      })
-      .catch((error) => {
-        console.error("Erro ao excluir produto(s):", error);
-        setSnackbar({ open: true, message: "Erro ao excluir produto(s).", severity: "error" });
-      });
-  };
+  Promise.all(selected.map((id) => axios.delete(`/produtos/${id}`)))
+    .then(() => {
+      setRows((prevRows) => prevRows.filter((row) => !selected.includes(row.id)));
+      setSnackbar({ open: true, message: "Produto(s) excluído(s) com sucesso!", severity: "success" });
+      setSelected([]);
+    })
+    .catch(() => {
+      setSnackbar({ open: true, message: "Erro ao excluir produto(s).", severity: "error" });
+    });
+};
+
 
   const filteredRows = rows.filter(
     (row) =>

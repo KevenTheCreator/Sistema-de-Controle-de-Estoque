@@ -16,7 +16,7 @@ const EsqueceuSenha = () => {
         email: email,
       });
       setMessage(response.data);
-    } catch (error) {
+    } catch {
       setMessage("Erro ao enviar o link de redefinição de senha. Tente novamente.");
     }
   };

@@ -29,7 +29,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import axios from "axios";
+import axios from '../../api/axiosConfig'; 
+
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -462,11 +463,10 @@ export default function TelaEntrada() {
   const [editData, setEditData] = React.useState(null);
 
   React.useEffect(() => {
-    axios.get("http://localhost:8080/api/entradas")
+    axios.get("/entradas")
       .then((response) => setRows(response.data))
-      .catch((error) => {
+      .catch(() => {
         setSnackbar({ open: true, message: "Erro ao buscar entradas!", severity: "error" });
-        console.error("Erro ao buscar entradas:", error);
       });
   }, []);
 
@@ -487,7 +487,7 @@ export default function TelaEntrada() {
     const preco = Number(data.get("preco-unitario"));
     const valorTotalCalculado = quantidade * preco;
 
-    const novaEntrada = {
+    const newEntry = {
       produto: data.get("nome-produto"),
       quantidadeRecebida: quantidade,
       fornecedor: data.get("fornecedor"),
@@ -498,36 +498,30 @@ export default function TelaEntrada() {
       responsavel: data.get("responsavel"),
     };
 
-    axios.post("http://localhost:8080/api/entradas", novaEntrada)
-      .then(response => {
-        setRows(prev => [...prev, response.data]);
-        setSnackbar({ open: true, message: "Entrada cadastrada com sucesso!", severity: "success" });
-        setOpenDialog(false);
-        setQuantityReceived("");
-        setUnitPrice("");
-        setTotalValue("");
-      })
-      .catch(error => {
-        setSnackbar({ open: true, message: "Erro ao cadastrar entrada!", severity: "error" });
-        console.error(error);
-      });
-  };
+  axios.post("/entradas", newEntry)
+    .then(response => {
+      setRows(prev => [...prev, response.data]);
+      setSnackbar({ open: true, message: "Entrada cadastrada com sucesso!", severity: "success" });
+      setOpenDialog(false);
+      setQuantityReceived("");
+      setUnitPrice("");
+      setTotalValue("");
+    })
+    .catch(() => {
+      setSnackbar({ open: true, message: "Erro ao cadastrar entrada!", severity: "error" });
+    });
+  }
 
   const handleDelete = () => {
     if (selected.length === 0) return;
-    Promise.all(
-      selected.map(id =>
-        axios.delete(`http://localhost:8080/api/entradas/${id}`)
-      )
-    )
+    Promise.all(selected.map(id => axios.delete(`/entradas/${id}`)))
       .then(() => {
         setRows(prev => prev.filter(row => !selected.includes(row.id)));
         setSnackbar({ open: true, message: "Entradas excluídas com sucesso!", severity: "success" });
         setSelected([]);
       })
-      .catch(error => {
+      .catch(() => {
         setSnackbar({ open: true, message: "Erro ao excluir entradas!", severity: "error" });
-        console.error(error);
       });
   };
 
@@ -546,7 +540,7 @@ export default function TelaEntrada() {
     const preco = Number(data.get("preco-unitario"));
     const valorTotalCalculado = quantidade * preco;
 
-    const entradaAtualizada = {
+    const updatedEntry = {
       ...editData,
       produto: data.get("nome-produto"),
       quantidadeRecebida: quantidade,
@@ -558,7 +552,7 @@ export default function TelaEntrada() {
       responsavel: data.get("responsavel"),
     };
 
-    axios.put(`http://localhost:8080/api/entradas/${editData.id}`, entradaAtualizada)
+    axios.put(`/entradas/${editData.id}`, updatedEntry)
       .then(response => {
         setRows(prev => prev.map(row => row.id === editData.id ? response.data : row));
         setSnackbar({ open: true, message: "Entrada atualizada com sucesso!", severity: "success" });
@@ -566,9 +560,8 @@ export default function TelaEntrada() {
         setEditData(null);
         setSelected([]);
       })
-      .catch(error => {
+      .catch(() => {
         setSnackbar({ open: true, message: "Erro ao atualizar entrada!", severity: "error" });
-        console.error(error);
       });
   };
 

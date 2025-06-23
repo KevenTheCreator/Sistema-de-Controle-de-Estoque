@@ -1,7 +1,7 @@
 import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../api/axiosConfig";
 import "./login.css";
 
 const Login = () => {
@@ -14,25 +14,24 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/auth/login", {
+      const response = await axios.post("/auth/login", {
         email,
         password,
       });
 
       if (response.data && response.data.token && response.data.refreshToken) {
         const { token, refreshToken } = response.data;
-
         localStorage.setItem("token", token);
         localStorage.setItem("refreshToken", refreshToken);
-
         navigate("/tela-inicial");
+
       } else {
         setErrorMessage("Falha ao autenticar. Resposta inesperada.");
       }
-    } catch (error) {
-      console.log(error);
+
+    } catch {
       setErrorMessage("Falha ao autenticar. Verifique suas credenciais.");
-    }
+    } 
   };
 
   useEffect(() => {
