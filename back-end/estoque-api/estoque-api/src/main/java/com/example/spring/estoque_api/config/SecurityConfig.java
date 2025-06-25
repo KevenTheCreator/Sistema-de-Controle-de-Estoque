@@ -31,9 +31,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                        .requestMatchers("api/produtos/**").hasRole("ALMOXARIFE")
-                        .requestMatchers("api/entradas/**").hasRole("ALMOXARIFE")
-                        .requestMatchers("api/saidas/**").hasRole("ALMOXARIFE")
+                        .requestMatchers("/api/produtos/**").hasRole("ALMOXARIFE")
+                        .requestMatchers("/api/entradas/**").hasRole("ALMOXARIFE")
+                        .requestMatchers("/api/saidas/**").hasRole("ALMOXARIFE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
