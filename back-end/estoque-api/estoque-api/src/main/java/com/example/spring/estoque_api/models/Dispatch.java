@@ -33,5 +33,4 @@ public class Dispatch {
     private String destino;
 
     private String status;
-
 }
