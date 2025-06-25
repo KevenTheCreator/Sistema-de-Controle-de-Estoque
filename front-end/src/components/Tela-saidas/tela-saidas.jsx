@@ -32,168 +32,9 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
-function StatusChips({ status }) {
-  const getChipColor = (status) => {
-    switch (status) {
-      case "Cancelado":
-        return { label: "Cancelado", color: "error" }; 
-
-      case "Pendente":
-        return { label: "Pendente", color: "warning" }; 
-
-      case "Entregue":
-        return { label: "Entregue", color: "success" }; 
-
-      default:
-        return { label: status, color: "default" }; 
-    }
-  };
-
-  const { label, color } = getChipColor(status);
-
-  return (
-    <Stack direction="row" spacing={1} justifyContent="center">
-      <Chip label={label} color={color} />
-    </Stack>
-  );
-}
-
-function createData(
-  id,
-  produto,
-  quantidadeRetirada,
-  dataSaida,
-  dataDevolucao,
-  nomeSolicitante,
-  tipoSolicitante,
-  destino,
-  status
-) {
-  return {
-    id,
-    produto,
-    quantidadeRetirada,
-    dataSaida,
-    dataDevolucao,
-    nomeSolicitante,
-    tipoSolicitante,
-    destino,
-    status,
-  };
-}
-const rows = [
-  createData(
-    1,
-    "Teclado Mecânico",
-    3,
-    "2025-03-15",
-    "2025-04-15",
-    "Cleber",
-    "Funcionário",
-    "Casa",
-    "Entregue"
-  ),
-  createData(
-    2,
-    "Mouse Gamer",
-    2,
-    "2025-03-20",
-    "2025-04-20",
-    "Ana",
-    "Docente",
-    "Escritório",
-    "Pendente"
-  ),
-  createData(
-    3,
-    'Monitor 24"',
-    1,
-    "2025-03-25",
-    "2025-04-25",
-    "Carlos",
-    "Funcionário",
-    "Sala de Reunião",
-    "Cancelado"
-  ),
-  createData(
-    4,
-    "Notebook Dell",
-    5,
-    "2025-03-30",
-    "2025-04-30",
-    "Mariana",
-    "Funcionário",
-    "Laboratório",
-    "Entregue"
-  ),
-  createData(
-    5,
-    "Headset Gamer",
-    4,
-    "2025-04-01",
-    "2025-05-01",
-    "João",
-    "Docente",
-    "Auditório",
-    "Cancelado"
-  ),
-  createData(
-    6,
-    "Webcam Full HD",
-    2,
-    "2025-04-05",
-    "2025-05-05",
-    "Fernanda",
-    "Docente",
-    "Sala de Aula",
-    "Pendente"
-  ),
-  createData(
-    7,
-    "Mousepad RGB",
-    6,
-    "2025-04-10",
-    "2025-05-10",
-    "Lucas",
-    "Discente",
-    "Biblioteca",
-    "Entregue"
-  ),
-  createData(
-    8,
-    "Caixa de Som Bluetooth",
-    3,
-    "2025-04-15",
-    "2025-05-15",
-    "Beatriz",
-    "Discente",
-    "Sala de Estudos",
-    "Cancelado"
-  ),
-  createData(
-    9,
-    "Adaptador USB-C",
-    10,
-    "2025-04-20",
-    "2025-05-20",
-    "Gabriel",
-    "Discente",
-    "Laboratório de Informática",
-    "Entregue"
-  ),
-  createData(
-    10,
-    "Dock Station",
-    2,
-    "2025-04-25",
-    "2025-05-25",
-    "Larissa",
-    "Funcionário",
-    "Escritório",
-    "Pendente"
-  ),
-];
+import Snackbar from "@mui/material/Snackbar";
+import { Alert } from "@mui/material";
+import axios from "../../api/axiosConfig";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -272,6 +113,14 @@ const headCells = [
   },
 ];
 
+function StatusChips() {
+  return (
+    <Stack direction="row" spacing={1} justifyContent="center">
+      <Chip label="Entregue" color="success" />
+    </Stack>
+  );
+}
+
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -332,6 +181,9 @@ function EnhancedTableToolbar({
   handleOpenDialog,
   handleCloseDialog,
   openDialog,
+  handleCreateDispatch,
+  handleDeleteDispatch,
+  handleEdit,
 }) {
 
   return (
@@ -421,9 +273,18 @@ function EnhancedTableToolbar({
                   onSubmit: (event) => {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
-                    const formJson = Object.fromEntries(formData.entries());
-                    const email = formJson.email;
-                    console.log(email);
+                    const dispatchData = {
+                      produto: formData.get("nome-produto"),
+                      quantidadeRetirada: Number(formData.get("quantidade-retirada")),
+                      dataSaida: formData.get("data-saida"),
+                      dataDevolucao: formData.get("data-devolucao"),
+                      nomeSolicitante: formData.get("nome-solicitante"),
+                      tipoSolicitante: formData.get("tipo-solicitante"),
+                      destino: formData.get("destino"),
+                      status: "Entregue"
+                    };
+                    handleCreateDispatch(dispatchData);
+                    handleCloseDialog();
                   },
                 },
               }}
@@ -442,6 +303,7 @@ function EnhancedTableToolbar({
                   required
                   margin="dense"
                   id="nome-produto"
+                  name="nome-produto" 
                   label="Nome do Produto"
                   type="text"
                   fullWidth
@@ -451,6 +313,7 @@ function EnhancedTableToolbar({
                   required
                   margin="dense"
                   id="quantidade-retirada"
+                  name="quantidade-retirada" 
                   label="Quantidade Retirada"
                   type="number"
                   fullWidth
@@ -460,6 +323,7 @@ function EnhancedTableToolbar({
                   required
                   margin="dense"
                   id="data-saida"
+                  name="data-saida" 
                   type="date"
                   label="Data de Saída"
                   fullWidth
@@ -471,6 +335,7 @@ function EnhancedTableToolbar({
                 <TextField
                   margin="dense"
                   id="data-devolucao"
+                  name="data-devolucao" 
                   type="date"
                   label="Data de Devolução"
                   fullWidth
@@ -483,6 +348,7 @@ function EnhancedTableToolbar({
                   required
                   margin="dense"
                   id="nome-solicitante"
+                  name="nome-solicitante" 
                   label="Nome do Solicitante"
                   type="text"
                   fullWidth
@@ -495,27 +361,27 @@ function EnhancedTableToolbar({
                   <Select
                     labelId="tipo-solicitante-label"
                     id="tipo-solicitante"
+                    name="tipo-solicitante" 
                     label="Tipo de Solicitante"
                     defaultValue=""
                   >
-                    <MenuItem value="funcionario">Funcionário</MenuItem>
-                    <MenuItem value="discente">Discente</MenuItem>
-                    <MenuItem value="docente">Docente</MenuItem>
+                    <MenuItem value="Funcionário">Funcionário</MenuItem>
+                    <MenuItem value="Discente">Discente</MenuItem>
+                    <MenuItem value="Docente">Docente</MenuItem>
                   </Select>
                 </FormControl>
-
-                {/* Categoria como Select */}
                 <FormControl fullWidth margin="dense">
                   <InputLabel id="destino-label" required>Destino</InputLabel>
                   <Select
                     labelId="destino-label"
                     id="destino"
+                    name="destino" 
                     label="Destino"
                     defaultValue=""
                   >
-                    <MenuItem value="laboratorio">Laboratório</MenuItem>
-                    <MenuItem value="escritorio">Escritório</MenuItem>
-                    <MenuItem value="galpao">Galpão</MenuItem>
+                    <MenuItem value="Laboratório">Laboratório</MenuItem>
+                    <MenuItem value="Escritório">Escritório</MenuItem>
+                    <MenuItem value="Galpão">Galpão</MenuItem>
                   </Select>
                 </FormControl>
               </DialogContent>
@@ -552,12 +418,12 @@ function EnhancedTableToolbar({
       {numSelected > 0 ? (
         <>
           <Tooltip title="Editar">
-            <IconButton>
+            <IconButton onClick={handleEdit} disabled={numSelected !== 1}>
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Excluir">
-            <IconButton>
+            <IconButton onClick={handleDeleteDispatch} disabled={numSelected === 0}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -577,7 +443,11 @@ export default function TelaSaidas() {
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState("");
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
+  const [editData, setEditData] = React.useState(null);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [rows, setRows] = React.useState([]);
+  const [snackbar, setSnackbar] = React.useState({ open: false, message: "", severity: "success" });
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
@@ -590,6 +460,58 @@ export default function TelaSaidas() {
       row.destino.toLowerCase().includes(filter.toLowerCase()) ||
       row.status.toLowerCase().includes(filter.toLowerCase())
   );
+
+  // Carregar saídas do backend
+  React.useEffect(() => {
+    axios.get("/saidas")
+      .then(response => setRows(response.data))
+      .catch(() => setSnackbar({ open: true, message: "Erro ao buscar saídas!", severity: "error" }));
+  }, []);
+
+  // Função para criar nova saída
+  const handleCreateDispatch = (dispatchData) => {
+    axios.post("/saidas", dispatchData)
+      .then(response => {
+        setRows(prev => [...prev, response.data]);
+        setSnackbar({ open: true, message: "Saída cadastrada!", severity: "success" });
+      })
+      .catch(() => setSnackbar({ open: true, message: "Erro ao cadastrar saída!", severity: "error" }));
+  };
+
+  // Função para abrir o diálogo de edição
+  const handleEdit = () => {
+      if (selected.length !== 1) return;
+      const row = rows.find(r => r.id === selected[0]);
+      setEditData(row);
+      setEditDialogOpen(true);
+  };
+
+  // Função para editar saída
+  const handleEditDispatch = (dispatchData) => {
+    axios.put(`/saidas/${editData.id}`, dispatchData)
+      .then(response => {
+        setRows(prev => prev.map(row => row.id === editData.id ? response.data : row));
+        setSnackbar({ open: true, message: "Saída atualizada!", severity: "success" });
+        setEditDialogOpen(false);
+        setEditData(null);
+        setSelected([]);
+      })
+      .catch(() => setSnackbar({ open: true, message: "Erro ao atualizar saída!", severity: "error" }));
+  };
+
+  // Função para deletar saída
+  const handleDeleteDispatch = () => {
+    if (selected.length === 0) return;
+    Promise.all(selected.map(id => axios.delete(`/saidas/${id}`)))
+      .then(() => {
+        setRows(prev => prev.filter(row => !selected.includes(row.id)));
+        setSnackbar({ open: true, message: "Saídas excluídas com sucesso!", severity: "success" });
+        setSelected([]);
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao excluir saídas!", severity: "error" });
+      });
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -644,6 +566,10 @@ export default function TelaSaidas() {
           openDialog={openDialog} 
           handleOpenDialog={handleOpenDialog} 
           handleCloseDialog={handleCloseDialog} 
+          handleCreateDispatch={handleCreateDispatch}
+          handleDeleteDispatch={handleDeleteDispatch}
+          handleEdit={handleEdit}
+          selected={selected}
         />
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
@@ -704,7 +630,7 @@ export default function TelaSaidas() {
                         {row.dataSaida}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.dataDevolucao}
+                        {row.dataDevolucao ? row.dataDevolucao : "Sem retorno"}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 120 }}>
                         {row.nomeSolicitante}
@@ -716,7 +642,7 @@ export default function TelaSaidas() {
                         {row.destino}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 100 }}>
-                        <StatusChips status={row.status} />
+                        <StatusChips row={row} />
                       </TableCell>
                     </TableRow>
                   );
@@ -739,6 +665,156 @@ export default function TelaSaidas() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+    >
+      <Alert
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity}
+      >
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
+
+    <Dialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        slotProps={{
+          paper: {
+            component: "form",
+            onSubmit: (event) => {
+              event.preventDefault();
+              const data = new FormData(event.currentTarget);
+              const dispatchData = {
+                produto: data.get("nome-produto"),
+                quantidadeRetirada: Number(data.get("quantidade-retirada")),
+                dataSaida: data.get("data-saida"),
+                dataDevolucao: data.get("data-devolucao"),
+                nomeSolicitante: data.get("nome-solicitante"),
+                tipoSolicitante: data.get("tipo-solicitante"),
+                destino: data.get("destino"),
+                status: "Entregue"
+              };
+              handleEditDispatch(dispatchData);
+            }
+          }
+        }}
+      >
+      <DialogTitle>Editar Saída</DialogTitle>
+      <DialogContent sx={{ display: "flex", flexDirection: "column", width: 600, gap: 3 }}>
+        <TextField
+          autoFocus
+          required
+          margin="dense"
+          id="nome-produto"
+          name="nome-produto"
+          label="Nome do Produto"
+          type="text"
+          fullWidth
+          variant="outlined"
+          defaultValue={editData?.produto || ""}
+        />
+        <TextField
+          required
+          margin="dense"
+          id="quantidade-retirada"
+          name="quantidade-retirada"
+          label="Quantidade Retirada"
+          type="number"
+          fullWidth
+          variant="outlined"
+          defaultValue={editData?.quantidadeRetirada || ""}
+        />
+        <TextField
+          required
+          margin="dense"
+          id="data-saida"
+          name="data-saida"
+          type="date"
+          fullWidth
+          variant="outlined"
+          defaultValue={editData?.dataSaida || ""}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          margin="dense"
+          id="data-devolucao"
+          name="data-devolucao"
+          type="date"
+          fullWidth
+          variant="outlined"
+          defaultValue={editData?.dataDevolucao || ""}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          required
+          margin="dense"
+          id="nome-solicitante"
+          name="nome-solicitante"
+          label="Nome do Solicitante"
+          type="text"
+          fullWidth
+          variant="outlined"
+          defaultValue={editData?.nomeSolicitante || ""}
+        />
+        <FormControl fullWidth margin="dense">
+          <InputLabel id="tipo-solicitante-label" required>
+            Tipo de Solicitante
+          </InputLabel>
+          <Select
+            labelId="tipo-solicitante-label"
+            id="tipo-solicitante"
+            name="tipo-solicitante"
+            label="Tipo de Solicitante"
+            defaultValue={editData?.tipoSolicitante || ""}
+          >
+            <MenuItem value="Funcionário">Funcionário</MenuItem>
+            <MenuItem value="Discente">Discente</MenuItem>
+            <MenuItem value="Docente">Docente</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth margin="dense">
+          <InputLabel id="destino-label" required>Destino</InputLabel>
+          <Select
+            labelId="destino-label"
+            id="destino"
+            name="destino"
+            label="Destino"
+            defaultValue={editData?.destino || ""}
+          >
+            <MenuItem value="Laboratório">Laboratório</MenuItem>
+            <MenuItem value="Escritório">Escritório</MenuItem>
+            <MenuItem value="Galpão">Galpão</MenuItem>
+          </Select>
+        </FormControl>
+      </DialogContent>
+      <DialogActions sx={{ mr: 2, mb: 2 }}>
+        <Button
+          variant="outlined"
+          onClick={() => setEditDialogOpen(false)}
+          sx={{
+            fontWeight: 700,
+            fontFamily: "Montserrat",
+            boxShadow: 0,
+          }}
+        >
+          Cancelar
+        </Button>
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            fontWeight: 700,
+            fontFamily: "Montserrat",
+            boxShadow: 0,
+          }}
+        >
+          Salvar
+        </Button>
+      </DialogActions>
+    </Dialog>
     </Box>
   );
 }

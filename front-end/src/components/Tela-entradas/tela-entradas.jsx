@@ -312,6 +312,7 @@ function EnhancedTableToolbar({
                   margin="dense"
                   id="nome-produto"
                   label="Nome do Produto"
+                  name="nome-produto"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -321,6 +322,7 @@ function EnhancedTableToolbar({
                   margin="dense"
                   id="quantidade-recebida"
                   label="Quantidade Recebida"
+                  name="quantidade-recebida"
                   type="number"
                   fullWidth
                   variant="outlined"
@@ -332,6 +334,7 @@ function EnhancedTableToolbar({
                   margin="dense"
                   id="fornecedor"
                   label="Fornecedor"
+                  name="fornecedor"
                   type="text"
                   fullWidth
                   variant="outlined"
@@ -340,9 +343,14 @@ function EnhancedTableToolbar({
                   required
                   margin="dense"
                   id="data-entrada"
+                  name="data-entrada" 
                   type="date"
+                  label="Data de Entrada"
                   fullWidth
                   variant="outlined"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
                 <TextField
                   required
