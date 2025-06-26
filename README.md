@@ -37,27 +37,31 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
 
 ### ⚙️ Back-end
 
-1. Acesse a pasta do back-end:   
+1. Acesse a pasta do back-end:
+   
    ```bash
    cd back-end/
      
-2. Configure o banco de dados PostgreSQL no arquivo application.properties.
+3. Configure o banco de dados PostgreSQL no arquivo application.properties.
 
-3. Compile e execute:
+4. Compile e execute:
    ```bash
     ./mvnw spring-boot:run
 
 ### 🖼️ Front-end
 
 1. Acesse a pasta do frontend:
+   
    ```bash
    cd front-end/
 
-2. Instale as dependências:
+3. Instale as dependências:
+   
    ```bash 
    npm install
 
-3. rode a aplicação:
+4. rode a aplicação:
+   
    ```bash
    npm run dev
 
