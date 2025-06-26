@@ -21,246 +21,47 @@ import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import SearchIcon from "@mui/icons-material/Search";
+import Snackbar from "@mui/material/Snackbar";
+import { Alert } from "@mui/material";
+import axios from "../../api/axiosConfig";
 
-function StatusChips({ status }) {
-  const getChipColor = (status) => {
-    switch (status) {
-      case "Cancelado":
-        return { label: "Cancelado", color: "error" };
-
-      case "Pendente":
-        return { label: "Pendente", color: "warning" };
-
-      case "Entregue":
-        return { label: "Entregue", color: "success" };
-
-      default:
-        return { label: status, color: "default" };
-    }
-  };
-
-  const { label, color } = getChipColor(status);
-
+// Exibe chip de status "Entregue"
+function StatusChips() {
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
-      <Chip label={label} color={color} />
+      <Chip label="Entregue" color="success" />
     </Stack>
   );
 }
 
-function createData(
-  id,
-  nomeSolicitante,
-  tipoSolicitante,
-  produto,
-  quantidadeRetirada,
-  dataSaida,
-  dataDevolucao,
-  destino,
-  status
-) {
-  return {
-    id,
-    nomeSolicitante,
-    tipoSolicitante,
-    produto,
-    quantidadeRetirada,
-    dataSaida,
-    dataDevolucao,
-    destino,
-    status,
-  };
-}
-
-const rows = [
-  createData(
-    1,
-    "Cleber",
-    "Funcionário",
-    "Teclado Mecânico",
-    3,
-    "2025-03-15",
-    "2025-04-15",
-    "Casa",
-    "Entregue"
-  ),
-  createData(
-    2,
-    "Ana",
-    "Docente",
-    "Mouse Gamer",
-    2,
-    "2025-03-20",
-    "2025-04-20",
-    "Escritório",
-    "Pendente"
-  ),
-  createData(
-    3,
-    "Carlos",
-    "Funcionário",
-    'Monitor 24"',
-    1,
-    "2025-03-25",
-    "2025-04-25",
-    "Sala de Reunião",
-    "Cancelado"
-  ),
-  createData(
-    4,
-    "Mariana",
-    "Funcionário",
-    "Notebook Dell",
-    5,
-    "2025-03-30",
-    "2025-04-30",
-    "Laboratório",
-    "Entregue"
-  ),
-  createData(
-    5,
-    "João",
-    "Docente",
-    "Headset Gamer",
-    4,
-    "2025-04-01",
-    "2025-05-01",
-    "Auditório",
-    "Cancelado"
-  ),
-  createData(
-    6,
-    "Fernanda",
-    "Docente",
-    "Webcam Full HD",
-    2,
-    "2025-04-05",
-    "2025-05-05",
-    "Sala de Aula",
-    "Pendente"
-  ),
-  createData(
-    7,
-    "Lucas",
-    "Discente",
-    "Mousepad RGB",
-    6,
-    "2025-04-10",
-    "2025-05-10",
-    "Biblioteca",
-    "Entregue"
-  ),
-  createData(
-    8,
-    "Beatriz",
-    "Discente",
-    "Caixa de Som Bluetooth",
-    3,
-    "2025-04-15",
-    "2025-05-15",
-    "Sala de Estudos",
-    "Cancelado"
-  ),
-  createData(
-    9,
-    "Gabriel",
-    "Discente",
-    "Adaptador USB-C",
-    10,
-    "2025-04-20",
-    "2025-05-20",
-    "Laboratório de Informática",
-    "Entregue"
-  ),
-  createData(
-    10,
-    "Larissa",
-    "Funcionário",
-    "Dock Station",
-    2,
-    "2025-04-25",
-    "2025-05-25",
-    "Escritório",
-    "Pendente"
-  ),
-];
-
+// Função para ordenação decrescente
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
   return 0;
 }
 
+// Retorna função de comparação para ordenação
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-  }
-  
-  const headCells = [
-  { id: "ord",
-    numeric: false,
-    disablePadding: true,
-    label: "Ordem"
-  },
+}
 
-  {
-    id: "nomeSolicitante",
-    numeric: false,
-    disablePadding: false,
-    label: "Nome do Solicitante",
-  },
-  
-  {
-    id: "tipoSolicitante",
-    numeric: false,
-    disablePadding: false,
-    label: "Tipo de Solicitante",
-  },
-
-  { 
-    id: "produto",
-    numeric: false,
-    disablePadding: false,
-    label: "Produto"
-  },
-
-  {
-    id: "quantidadeRetirada",
-    numeric: true,
-    disablePadding: false,
-    label: "Quantidade Retirada",
-  },
-
-  {
-    id: "dataSaida",
-    numeric: false,
-    disablePadding: false,
-    label: "Data Saída",
-  },
-
-  {
-    id: "dataDevolucao",
-    numeric: false,
-    disablePadding: false,
-    label: "Data de Devolução",
-  },
-  
-  { 
-    id: "destino",
-    numeric: false,
-    disablePadding: false,
-    label: "Destino",
-  },
-
-  { 
-    id: "status",
-    numeric: false,
-    disablePadding: false,
-    label: "Status",
-  },
+// Cabeçalhos da tabela de solicitantes
+const headCells = [
+  { id: "ord", numeric: false, disablePadding: true, label: "Ordem" },
+  { id: "nomeSolicitante", numeric: false, disablePadding: false, label: "Nome do Solicitante" },
+  { id: "tipoSolicitante", numeric: false, disablePadding: false, label: "Tipo de Solicitante" },
+  { id: "produto", numeric: false, disablePadding: false, label: "Produto" },
+  { id: "quantidadeRetirada", numeric: true, disablePadding: false, label: "Quantidade Retirada" },
+  { id: "dataSaida", numeric: false, disablePadding: false, label: "Data Saída" },
+  { id: "dataDevolucao", numeric: false, disablePadding: false, label: "Data de Devolução" },
+  { id: "destino", numeric: false, disablePadding: false, label: "Destino" },
+  { id: "status", numeric: false, disablePadding: false, label: "Status" },
 ];
 
+// Cabeçalho da tabela com ordenação
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -314,7 +115,8 @@ function EnhancedTableHead(props) {
   );
 }
 
-function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
+// Barra de ferramentas acima da tabela (pesquisa, excluir)
+function EnhancedTableToolbar({ numSelected, filter, setFilter, handleDeleteDispatch }) {
   return (
     <Toolbar
       sx={[
@@ -335,6 +137,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
         },
       ]}
     >
+      {/* Exibe quantidade selecionada ou título */}
       {numSelected > 0 ? (
         <Typography sx={{ width: "100%" }} color="inherit" variant="subtitle1">
           {numSelected} selecionado(s)
@@ -349,6 +152,7 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
           >
             SOLICITANTES
           </Typography>
+          {/* Campo de pesquisa */}
           <TextField
             variant="outlined"
             size="small"
@@ -374,9 +178,10 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
         </>
       )}
 
+      {/* Botão de excluir quando há seleção */}
       {numSelected > 0 ? (
         <Tooltip title="Excluir">
-          <IconButton>
+          <IconButton onClick={handleDeleteDispatch} disabled={numSelected === 0}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -387,7 +192,9 @@ function EnhancedTableToolbar({ numSelected, filter, setFilter }) {
   );
 }
 
+// Componente principal da tela de solicitantes
 export default function Telasolicitantes() {
+  // Estados principais
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
@@ -395,19 +202,45 @@ export default function Telasolicitantes() {
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState("");
+  const [rows, setRows] = React.useState([]);
+  const [snackbar, setSnackbar] = React.useState({ open: false, message: "", severity: "success" });
 
+  // Filtro de pesquisa
   const filteredRows = rows.filter(
     (row) =>
       row.tipoSolicitante.toLowerCase().includes(filter.toLowerCase()) ||
       row.nomeSolicitante.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Carrega dados dos solicitantes (saídas) ao montar o componente
+  React.useEffect(() => {
+    axios.get("/saidas")
+      .then(response => setRows(response.data))
+      .catch(() => setRows([]));
+  }, []);
+
+    // Exclui dados dos solicitantes selecionados (saídas)
+  const handleDeleteDispatch = () => {
+    if (selected.length === 0) return;
+    Promise.all(selected.map(id => axios.delete(`/saidas/${id}`)))
+      .then(() => {
+        setRows(prev => prev.filter(row => !selected.includes(row.id)));
+        setSnackbar({ open: true, message: "Solicitantes excluídos com sucesso!", severity: "success" });
+        setSelected([]);
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao excluir solititantes!", severity: "error" });
+      });
+  };
+
+  // Ordenação da tabela
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  // Seleciona todos os itens da página
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = filteredRows.map((n) => n.id);
@@ -417,6 +250,7 @@ export default function Telasolicitantes() {
     setSelected([]);
   };
 
+  // Seleciona/desseleciona um item
   const handleClick = (event, id) => {
     setSelected((prevSelected) =>
       prevSelected.includes(id)
@@ -425,13 +259,16 @@ export default function Telasolicitantes() {
     );
   };
 
+  // Paginação
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Verifica se item está selecionado
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  // Linhas vazias para preencher a tabela
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
@@ -448,11 +285,15 @@ export default function Telasolicitantes() {
           marginTop: 7,
         }}
       >
+        {/* Barra de ferramentas */}
         <EnhancedTableToolbar
           numSelected={selected.length}
           filter={filter}
           setFilter={setFilter}
+          handleDeleteDispatch={handleDeleteDispatch}
+          selected={selected}
         />
+        {/* Tabela de solicitantes */}
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
             sx={{ minWidth: 1000 }}
@@ -518,7 +359,7 @@ export default function Telasolicitantes() {
                         {row.dataSaida}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
-                        {row.dataDevolucao}
+                        {row.dataDevolucao ? row.dataDevolucao : "Sem retorno"}
                       </TableCell>
                       <TableCell align="center" sx={{ minWidth: 150 }}>
                         {row.destino}
@@ -537,6 +378,7 @@ export default function Telasolicitantes() {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* Paginação */}
         <TablePagination
           rowsPerPageOptions={[10, 25]}
           component="div"
@@ -547,6 +389,19 @@ export default function Telasolicitantes() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {/* Snackbar de feedback */}
+      <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+    >
+      <Alert
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity}
+      >
+        {snackbar.message}
+      </Alert>
+    </Snackbar>
     </Box>
   );
 }

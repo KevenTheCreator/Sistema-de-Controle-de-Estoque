@@ -34,70 +34,32 @@ import axios from "../../api/axiosConfig";
 import Snackbar from "@mui/material/Snackbar"; 
 import Alert from "@mui/material/Alert"; 
 
-
+// Função para ordenação decrescente
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
   return 0;
 }
 
+// Retorna função de comparação para ordenação
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// Cabeçalhos da tabela de produtos
 const headCells = [
-  {
-    id: "ordProduto",
-    numeric: false,
-    disablePadding: true,
-    label: "Ordem"
-  },
-
-  {
-    id: "produto",
-    numeric: false,
-    disablePadding: false,
-    label: "Produto"
-  },
-
-  {
-    id: "quantidade",
-    numeric: true,
-    disablePadding: false,
-    label: "Quantidade",
-  },
-
-  {
-    id: "fornecedor",
-    numeric: false,
-    disablePadding: false,
-    label: "Fornecedor",
-  },
-
-  {
-    id: "codigoProduto",
-    numeric: false,
-    disablePadding: false,
-    label: "Código do produto",
-  },
-
-  {
-    id: "unidadeMedida",
-    numeric: false,
-    disablePadding: false,
-    label: "Unidade de Medida",
-  },
-
-  {
-    id: "categoria",
-    numeric: false,
-    disablePadding: false,
-    label: "Categoria",
-  },
+  { id: "ordProduto", numeric: false, disablePadding: true, label: "Ordem" },
+  { id: "produto", numeric: false, disablePadding: false, label: "Produto" },
+  { id: "quantidade", numeric: true, disablePadding: false, label: "Quantidade" },
+  { id: "fornecedor", numeric: false, disablePadding: false, label: "Fornecedor" },
+  { id: "codigoProduto", numeric: false, disablePadding: false, label: "Código do produto" },
+  { id: "unidadeMedida", numeric: false, disablePadding: false, label: "Unidade de Medida" },
+  { id: "categoria", numeric: false, disablePadding: false, label: "Categoria" },
 ];
 
+// Cabeçalho da tabela com ordenação
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -151,6 +113,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// Barra de ferramentas acima da tabela (pesquisa, cadastrar, editar, excluir)
 function EnhancedTableToolbar({ 
   numSelected, 
   selected,
@@ -187,6 +150,7 @@ function EnhancedTableToolbar({
         },
       ]}
     >
+      {/* Exibe quantidade selecionada ou título */}
       {numSelected > 0 ? (
         <Typography sx={{ width: "100%", fontFamily: "Montserrat" }} color="inherit" variant="subtitle1">
           {numSelected} selecionado(s)
@@ -197,6 +161,7 @@ function EnhancedTableToolbar({
             PRODUTOS
           </Typography>
 
+          {/* Campo de pesquisa */}
           <TextField
             variant="outlined"
             size="small"
@@ -219,8 +184,10 @@ function EnhancedTableToolbar({
               },
             }}
           />
+          {/* Botão para abrir o diálogo de cadastro */}
           <Button variant="contained" startIcon={<AddCircleIcon />} sx={{ height: 39, fontWeight: 700, fontFamily: "Montserrat", boxShadow: 0 }} onClick={handleOpenDialog} 
           >Cadastrar Produto</Button>
+          {/* Diálogo de cadastro de produto */}
           <React.Fragment>
             <Dialog open={openDialog} onClose={handleCloseDialog}
               slotProps={{
@@ -312,6 +279,7 @@ function EnhancedTableToolbar({
         </>
       )}
 
+      {/* Botões de editar e excluir quando há seleção */}
       {numSelected > 0 ? (
         <>
           <Tooltip title="Editar">
@@ -336,7 +304,9 @@ function EnhancedTableToolbar({
   );
 }
 
+// Componente principal da tela de produtos
 export default function Telaprodutos() {
+  // Estados principais
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
@@ -352,34 +322,37 @@ export default function Telaprodutos() {
   const [filterField, setFilterField] = React.useState("produto");
   const [filterOrder, setFilterOrder] = React.useState("ascendente");
 
- React.useEffect(() => {
-  axios.get('/produtos')  
-    .then((response) => setRows(response.data))
-    .catch(() => {
-      setSnackbar({ open: true, message: "Erro ao carregar produtos.", severity: "error" });
-    });
-}, []);
+  // Carrega produtos do backend ao montar o componente
+  React.useEffect(() => {
+    axios.get('/produtos')  
+      .then((response) => setRows(response.data))
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao carregar produtos.", severity: "error" });
+      });
+  }, []);
 
-const handleOpenDialog = () => setOpenDialog(true);
-const handleCloseDialog = () => setOpenDialog(false);
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
 
-const handleCreateProduct = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  const newProduct = Object.fromEntries(formData.entries());
-  newProduct.quantidade = parseInt(newProduct.quantidade, 10);
+  // Cria novo produto
+  const handleCreateProduct = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newProduct = Object.fromEntries(formData.entries());
+    newProduct.quantidade = parseInt(newProduct.quantidade, 10);
 
-  axios.post('/produtos', newProduct)
-    .then((response) => {
-      setRows((prevRows) => [...prevRows, response.data]);
-      handleCloseDialog();
-      setSnackbar({ open: true, message: "Produto cadastrado com sucesso!", severity: "success" });
-    })
-    .catch(() => {
-      setSnackbar({ open: true, message: "Erro ao cadastrar produto.", severity: "error" });
-    });
-};
+    axios.post('/produtos', newProduct)
+      .then((response) => {
+        setRows((prevRows) => [...prevRows, response.data]);
+        handleCloseDialog();
+        setSnackbar({ open: true, message: "Produto cadastrado com sucesso!", severity: "success" });
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao cadastrar produto.", severity: "error" });
+      });
+  };
 
+  // Abre diálogo de edição
   const handleEditProduct = () => {
     if (selected.length !== 1) {
       setSnackbar({ open: true, message: "Selecione apenas um produto para editar.", severity: "warning" });
@@ -394,49 +367,52 @@ const handleCreateProduct = (event) => {
     setEditDialogOpen(true);
   };
 
-    const handleCloseEditDialog = () => {
-      setEditDialogOpen(false);
-      setEditProduct(null);
-      setSelected([]);
+  // Fecha diálogo de edição
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+    setEditProduct(null);
+    setSelected([]);
   };
 
-const handleUpdateProduct = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  const updated = Object.fromEntries(formData.entries());
-  updated.quantidade = parseInt(updated.quantidade, 10);
+  // Atualiza produto editado
+  const handleUpdateProduct = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const updated = Object.fromEntries(formData.entries());
+    updated.quantidade = parseInt(updated.quantidade, 10);
 
-  axios.put(`/produtos/${editProduct.id}`, updated)
-    .then((response) => {
-      setRows((prevRows) =>
-        prevRows.map((row) => (row.id === editProduct.id ? response.data : row))
-      );
-      setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
-      handleCloseEditDialog();
-    })
-    .catch(() => {
-      setSnackbar({ open: true, message: "Erro ao editar produto.", severity: "error" });
-    });
-};
+    axios.put(`/produtos/${editProduct.id}`, updated)
+      .then((response) => {
+        setRows((prevRows) =>
+          prevRows.map((row) => (row.id === editProduct.id ? response.data : row))
+        );
+        setSnackbar({ open: true, message: "Produto editado com sucesso!", severity: "success" });
+        handleCloseEditDialog();
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao editar produto.", severity: "error" });
+      });
+  };
 
-const handleDeleteProducts = () => {
-  if (selected.length === 0) {
-    setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
-    return;
-  }
+  // Exclui produtos selecionados
+  const handleDeleteProducts = () => {
+    if (selected.length === 0) {
+      setSnackbar({ open: true, message: "Selecione pelo menos um produto para excluir.", severity: "warning" });
+      return;
+    }
 
-  Promise.all(selected.map((id) => axios.delete(`/produtos/${id}`)))
-    .then(() => {
-      setRows((prevRows) => prevRows.filter((row) => !selected.includes(row.id)));
-      setSnackbar({ open: true, message: "Produto(s) excluído(s) com sucesso!", severity: "success" });
-      setSelected([]);
-    })
-    .catch(() => {
-      setSnackbar({ open: true, message: "Erro ao excluir produto(s).", severity: "error" });
-    });
-};
+    Promise.all(selected.map((id) => axios.delete(`/produtos/${id}`)))
+      .then(() => {
+        setRows((prevRows) => prevRows.filter((row) => !selected.includes(row.id)));
+        setSnackbar({ open: true, message: "Produto(s) excluído(s) com sucesso!", severity: "success" });
+        setSelected([]);
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao excluir produto(s).", severity: "error" });
+      });
+  };
 
-
+  // Filtro de pesquisa
   const filteredRows = rows.filter(
     (row) =>
       row.produto.toLowerCase().includes(filter.toLowerCase()) ||
@@ -447,17 +423,20 @@ const handleDeleteProducts = () => {
       row.categoria.toLowerCase().includes(filter.toLowerCase()) 
   );
 
+  // Aplica filtros de campo e ordem
   const applyFilters = () => {
     setOrderBy(filterField);
     setOrder(filterOrder === "ascendente" ? "asc" : "desc");
   };
 
+  // Ordenação da tabela
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  // Seleciona todos os itens da página
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = filteredRows.map((n) => n.id);
@@ -467,6 +446,7 @@ const handleDeleteProducts = () => {
     setSelected([]);
   };
 
+  // Seleciona/desseleciona um item
   const handleClick = (event, id) => {
     setSelected((prevSelected) =>
       prevSelected.includes(id)
@@ -475,13 +455,16 @@ const handleDeleteProducts = () => {
     );
   };
 
+  // Paginação
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Verifica se item está selecionado
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  // Linhas vazias para preencher a tabela
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
@@ -490,6 +473,7 @@ const handleDeleteProducts = () => {
       <Paper
         sx={{ width: "90%", mb: 2, borderRadius: 2, p: 2, mt: 10, mx: "auto", marginTop: 7 }}
       >
+        {/* Barra de ferramentas */}
         <EnhancedTableToolbar
           numSelected={selected.length}
           selected={selected} 
@@ -507,6 +491,7 @@ const handleDeleteProducts = () => {
           setFilterOrder={setFilterOrder}
           applyFilters={applyFilters}
         />
+        {/* Tabela de produtos */}
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
             sx={{ minWidth: 1000 }}
@@ -585,6 +570,7 @@ const handleDeleteProducts = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* Paginação */}
         <TablePagination
           rowsPerPageOptions={[10, 25]}
           component="div"
@@ -596,6 +582,7 @@ const handleDeleteProducts = () => {
         />
       </Paper>
 
+      {/* Diálogo de edição de produto */}
       <Dialog open={editDialogOpen} onClose={handleCloseEditDialog}
         slotProps={{
           paper: {
@@ -687,6 +674,7 @@ const handleDeleteProducts = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Snackbar de feedback */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

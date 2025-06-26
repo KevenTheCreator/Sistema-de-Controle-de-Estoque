@@ -29,12 +29,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import axios from '../../api/axiosConfig'; 
+import axios from '../../api/axiosConfig';
 
-
+// Formatação customizada para campo de moeda
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
-
   return (
     <NumberFormatBase
       {...other}
@@ -57,82 +56,34 @@ function NumberFormatCustom(props) {
   );
 }
 
+// Função para ordenação decrescente
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
   return 0;
 }
 
+// Retorna função de comparação para ordenação
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// Cabeçalhos da tabela de entradas
 const headCells = [
-  {
-    id: "ordProduto",
-    numeric: false,
-    disablePadding: true,
-    label: "Ordem",
-  },
-
-  {
-    id: "produto",
-    numeric: false,
-    disablePadding: false,
-    label: "Produto",
-  },
-  {
-    id: "quantidadeRecebida",
-    numeric: true,
-    disablePadding: false,
-    label: "Quantidade Recebida",
-  },
-
-  {
-    id: "fornecedor",
-    numeric: false,
-    disablePadding: false,
-    label: "Fornecedor",
-  },
-
-  {
-    id: "dataDeEntrada",
-    numeric: false,
-    disablePadding: false,
-    label: "Data de Entrada",
-  },
-
-  {
-    id: "notaFiscal",
-    numeric: false,
-    disablePadding: false,
-    label: "Nota Fiscal",
-  },
-
-  {
-    id: "precoUnitario",
-    numeric: false,
-    disablePadding: false,
-    label: "Preço Unitário",
-  },
-
-  {
-    id: "valorTotal",
-    numeric: true,
-    disablePadding: false,
-    label: "Valor Total",   
-  },
-
-  {
-    id: "responsavel",
-    numeric: false,
-    disablePadding: false,
-    label: "Responsável",
-  },
+  { id: "ordProduto", numeric: false, disablePadding: true, label: "Ordem" },
+  { id: "produto", numeric: false, disablePadding: false, label: "Produto" },
+  { id: "quantidadeRecebida", numeric: true, disablePadding: false, label: "Quantidade Recebida" },
+  { id: "fornecedor", numeric: false, disablePadding: false, label: "Fornecedor" },
+  { id: "dataDeEntrada", numeric: false, disablePadding: false, label: "Data de Entrada" },
+  { id: "notaFiscal", numeric: false, disablePadding: false, label: "Nota Fiscal" },
+  { id: "precoUnitario", numeric: false, disablePadding: false, label: "Preço Unitário" },
+  { id: "valorTotal", numeric: true, disablePadding: false, label: "Valor Total" },
+  { id: "responsavel", numeric: false, disablePadding: false, label: "Responsável" },
 ];
 
+// Cabeçalho da tabela com ordenação
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -186,6 +137,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// Barra de ferramentas acima da tabela (pesquisa, cadastrar, editar, excluir)
 function EnhancedTableToolbar({
   numSelected,
   filter,
@@ -202,7 +154,6 @@ function EnhancedTableToolbar({
   onDelete,
   selected,
 }) {
-
   return (
     <Toolbar
       sx={[
@@ -226,6 +177,7 @@ function EnhancedTableToolbar({
         },
       ]}
     >
+      {/* Exibe quantidade selecionada ou título */}
       {numSelected > 0 ? (
         <Typography
           sx={{ width: "100%", fontFamily: "Montserrat" }}
@@ -244,7 +196,7 @@ function EnhancedTableToolbar({
           >
             ENTRADAS
           </Typography>
-
+          {/* Campo de pesquisa */}
           <TextField
             variant="outlined"
             size="small"
@@ -267,6 +219,7 @@ function EnhancedTableToolbar({
               },
             }}
           />
+          {/* Botão para abrir o diálogo de cadastro */}
           <Button
             variant="contained"
             startIcon={<AddCircleIcon />}
@@ -280,6 +233,7 @@ function EnhancedTableToolbar({
           >
             Cadastrar Entrada
           </Button>
+          {/* Diálogo de cadastro de entrada */}
           <React.Fragment>
             <Dialog
               open={openDialog}
@@ -306,6 +260,7 @@ function EnhancedTableToolbar({
                   gap: 3,
                 }}
               >
+                {/* Campos do formulário de cadastro */}
                 <TextField
                   autoFocus
                   required
@@ -403,7 +358,6 @@ function EnhancedTableToolbar({
                   variant="outlined"
                 />
               </DialogContent>
-
               <DialogActions sx={{ mr: 2, mb: 2 }}>
                 <Button
                   variant="outlined"
@@ -433,6 +387,7 @@ function EnhancedTableToolbar({
         </>
       )}
 
+      {/* Botões de editar e excluir quando há seleção */}
       {numSelected > 0 ? (
         <>
           <Tooltip title="Editar">
@@ -453,7 +408,9 @@ function EnhancedTableToolbar({
   );
 }
 
+// Componente principal da tela de entradas
 export default function TelaEntrada() {
+  // Estados principais
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
@@ -470,6 +427,7 @@ export default function TelaEntrada() {
   const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const [editData, setEditData] = React.useState(null);
 
+  // Carrega entradas do backend ao montar o componente
   React.useEffect(() => {
     axios.get("/entradas")
       .then((response) => setRows(response.data))
@@ -478,6 +436,7 @@ export default function TelaEntrada() {
       });
   }, []);
 
+  // Atualiza valor total automaticamente ao alterar quantidade ou preço unitário
   React.useEffect(() => {
     const quantidade = parseFloat(quantityReceived) || 0;
     const preco = parseFloat(unitPrice) || 0;
@@ -487,6 +446,7 @@ export default function TelaEntrada() {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
+  // Cadastra nova entrada
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -506,20 +466,21 @@ export default function TelaEntrada() {
       responsavel: data.get("responsavel"),
     };
 
-  axios.post("/entradas", newEntry)
-    .then(response => {
-      setRows(prev => [...prev, response.data]);
-      setSnackbar({ open: true, message: "Entrada cadastrada com sucesso!", severity: "success" });
-      setOpenDialog(false);
-      setQuantityReceived("");
-      setUnitPrice("");
-      setTotalValue("");
-    })
-    .catch(() => {
-      setSnackbar({ open: true, message: "Erro ao cadastrar entrada!", severity: "error" });
-    });
+    axios.post("/entradas", newEntry)
+      .then(response => {
+        setRows(prev => [...prev, response.data]);
+        setSnackbar({ open: true, message: "Entrada cadastrada com sucesso!", severity: "success" });
+        setOpenDialog(false);
+        setQuantityReceived("");
+        setUnitPrice("");
+        setTotalValue("");
+      })
+      .catch(() => {
+        setSnackbar({ open: true, message: "Erro ao cadastrar entrada!", severity: "error" });
+      });
   }
 
+  // Exclui entradas selecionadas
   const handleDelete = () => {
     if (selected.length === 0) return;
     Promise.all(selected.map(id => axios.delete(`/entradas/${id}`)))
@@ -533,6 +494,7 @@ export default function TelaEntrada() {
       });
   };
 
+  // Abre diálogo de edição
   const handleEdit = () => {
     if (selected.length !== 1) return;
     const row = rows.find(r => r.id === selected[0]);
@@ -540,6 +502,7 @@ export default function TelaEntrada() {
     setEditDialogOpen(true);
   };
 
+  // Salva edição da entrada
   const handleEditSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -573,6 +536,7 @@ export default function TelaEntrada() {
       });
   };
 
+  // Filtro de pesquisa
   const filteredRows = rows.filter(
     (row) =>
       (row.produto || "").toLowerCase().includes(filter.toLowerCase()) ||
@@ -582,12 +546,14 @@ export default function TelaEntrada() {
       (row.responsavel || "").toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Ordenação da tabela
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  // Seleciona todos os itens da página
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = filteredRows.map((n) => n.id);
@@ -597,6 +563,7 @@ export default function TelaEntrada() {
     setSelected([]);
   };
 
+  // Seleciona/desseleciona um item
   const handleClick = (event, id) => {
     setSelected((prevSelected) =>
       prevSelected.includes(id)
@@ -605,13 +572,16 @@ export default function TelaEntrada() {
     );
   };
 
+  // Paginação
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Verifica se item está selecionado
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  // Linhas vazias para preencher a tabela
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
@@ -628,6 +598,7 @@ export default function TelaEntrada() {
           marginTop: 7,
         }}
       >
+        {/* Barra de ferramentas */}
         <EnhancedTableToolbar
           quantityReceived={quantityReceived}
           setQuantityReceived={setQuantityReceived}
@@ -645,6 +616,7 @@ export default function TelaEntrada() {
           onDelete={handleDelete}
           selected={selected}
         />
+        {/* Diálogo de cadastro de entrada */}
         <Dialog
           open={openDialog}
           onClose={handleCloseDialog}
@@ -664,6 +636,7 @@ export default function TelaEntrada() {
               gap: 3,
             }}
           >
+            {/* Campos do formulário de cadastro */}
             <TextField
               autoFocus
               required
@@ -787,6 +760,7 @@ export default function TelaEntrada() {
             </Button>
           </DialogActions>
         </Dialog>
+        {/* Diálogo de edição de entrada */}
         <Dialog
           open={editDialogOpen}
           onClose={() => setEditDialogOpen(false)}
@@ -799,6 +773,7 @@ export default function TelaEntrada() {
         >
           <DialogTitle>Editar Entrada</DialogTitle>
           <DialogContent sx={{ display: "flex", flexDirection: "column", width: 600, gap: 3 }}>
+            {/* Campos do formulário de edição */}
             <TextField
               autoFocus
               required
@@ -927,6 +902,7 @@ export default function TelaEntrada() {
             </Button>
           </DialogActions>
         </Dialog>
+        {/* Tabela de entradas */}
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
             sx={{ minWidth: 1000 }}
@@ -1010,6 +986,7 @@ export default function TelaEntrada() {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* Paginação */}
         <TablePagination
           rowsPerPageOptions={[10, 25]}
           component="div"
@@ -1020,6 +997,7 @@ export default function TelaEntrada() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {/* Snackbar de feedback */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

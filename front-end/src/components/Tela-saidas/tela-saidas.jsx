@@ -36,83 +36,34 @@ import Snackbar from "@mui/material/Snackbar";
 import { Alert } from "@mui/material";
 import axios from "../../api/axiosConfig";
 
+// Função para ordenar decrescente
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
   if (b[orderBy] > a[orderBy]) return 1;
   return 0;
 }
 
+// Função para retornar o comparador de ordenação
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// Cabeçalhos da tabela
 const headCells = [
-  {
-    id: "ord",
-    numeric: false,
-    disablePadding: true,
-    label: "Ordem"
-  },
-
-  {
-    id: "produto",
-    numeric: false,
-    disablePadding: false,
-    label: "Produto"
-  },
-
-  {
-    id: "quantidadeRetirada",
-    numeric: true,
-    disablePadding: false,
-    label: "Quantidade Retirada",
-  },
-
-  {
-    id: "dataSaida",
-    numeric: false,
-    disablePadding: false,
-    label: "Data Saída",
-  },
-
-  {
-    id: "dataDevolucao",
-    numeric: false,
-    disablePadding: false,
-    label: "Data de Devolução",
-  },
-
-  {
-    id: "nomeSolicitante",
-    numeric: false,
-    disablePadding: false,
-    label: "Nome do Solicitante",
-  },
-
-  {
-    id: "tipoSolicitante",
-    numeric: false,
-    disablePadding: false,
-    label: "Tipo de Solicitante",
-  },
-
-  {
-    id: "destino",
-    numeric: false,
-    disablePadding: false,
-    label: "Destino",
-  },
-
-  {
-    id: "status",
-    numeric: false,
-    disablePadding: false,
-    label: "Status"
-  },
+  { id: "ord", numeric: false, disablePadding: true, label: "Ordem" },
+  { id: "produto", numeric: false, disablePadding: false, label: "Produto" },
+  { id: "quantidadeRetirada", numeric: true, disablePadding: false, label: "Quantidade Retirada" },
+  { id: "dataSaida", numeric: false, disablePadding: false, label: "Data Saída" },
+  { id: "dataDevolucao", numeric: false, disablePadding: false, label: "Data de Devolução" },
+  { id: "nomeSolicitante", numeric: false, disablePadding: false, label: "Nome do Solicitante" },
+  { id: "tipoSolicitante", numeric: false, disablePadding: false, label: "Tipo de Solicitante" },
+  { id: "destino", numeric: false, disablePadding: false, label: "Destino" },
+  { id: "status", numeric: false, disablePadding: false, label: "Status" },
 ];
 
+// Exibe o chip de status "Entregue"
 function StatusChips() {
   return (
     <Stack direction="row" spacing={1} justifyContent="center">
@@ -121,6 +72,7 @@ function StatusChips() {
   );
 }
 
+// Cabeçalho da tabela com ordenação
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -174,6 +126,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// Barra de ferramentas acima da tabela (pesquisa, cadastrar, editar, excluir)
 function EnhancedTableToolbar({
   numSelected,
   filter,
@@ -209,6 +162,7 @@ function EnhancedTableToolbar({
         },
       ]}
     >
+      {/* Exibe quantidade selecionada ou título */}
       {numSelected > 0 ? (
         <Typography
           sx={{ width: "100%", fontFamily: "Montserrat" }}
@@ -228,6 +182,7 @@ function EnhancedTableToolbar({
             SAÍDAS
           </Typography>
 
+          {/* Campo de pesquisa */}
           <TextField
             variant="outlined"
             size="small"
@@ -250,6 +205,7 @@ function EnhancedTableToolbar({
               },
             }}
           />
+          {/* Botão para abrir o diálogo de cadastro */}
           <Button
             variant="contained"
             startIcon={<AddCircleIcon />}
@@ -263,6 +219,7 @@ function EnhancedTableToolbar({
           >
             Cadastrar Saída
           </Button>
+          {/* Diálogo de cadastro de saída */}
           <React.Fragment>
             <Dialog
               open={openDialog}
@@ -298,6 +255,7 @@ function EnhancedTableToolbar({
                   gap: 3,
                 }}
               >
+                {/* Campos do formulário de cadastro */}
                 <TextField
                   autoFocus
                   required
@@ -415,6 +373,7 @@ function EnhancedTableToolbar({
         </>
       )}
 
+      {/* Botões de editar e excluir quando há seleção */}
       {numSelected > 0 ? (
         <>
           <Tooltip title="Editar">
@@ -435,7 +394,9 @@ function EnhancedTableToolbar({
   );
 }
 
+// Componente principal da tela de saídas
 export default function TelaSaidas() {
+  // Estados principais
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
@@ -451,6 +412,7 @@ export default function TelaSaidas() {
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
+  // Filtro de pesquisa
   const filteredRows = rows.filter(
     (row) =>
       row.tipoSolicitante.toLowerCase().includes(filter.toLowerCase()) ||
@@ -461,14 +423,14 @@ export default function TelaSaidas() {
       row.status.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Carregar saídas do backend
+  // Carrega as saídas do backend ao montar o componente
   React.useEffect(() => {
     axios.get("/saidas")
       .then(response => setRows(response.data))
       .catch(() => setSnackbar({ open: true, message: "Erro ao buscar saídas!", severity: "error" }));
   }, []);
 
-  // Função para criar nova saída
+  // Cria nova saída
   const handleCreateDispatch = (dispatchData) => {
     axios.post("/saidas", dispatchData)
       .then(response => {
@@ -478,7 +440,7 @@ export default function TelaSaidas() {
       .catch(() => setSnackbar({ open: true, message: "Erro ao cadastrar saída!", severity: "error" }));
   };
 
-  // Função para abrir o diálogo de edição
+  // Abre diálogo de edição
   const handleEdit = () => {
       if (selected.length !== 1) return;
       const row = rows.find(r => r.id === selected[0]);
@@ -486,7 +448,7 @@ export default function TelaSaidas() {
       setEditDialogOpen(true);
   };
 
-  // Função para editar saída
+  // Edita saída selecionada
   const handleEditDispatch = (dispatchData) => {
     axios.put(`/saidas/${editData.id}`, dispatchData)
       .then(response => {
@@ -499,7 +461,7 @@ export default function TelaSaidas() {
       .catch(() => setSnackbar({ open: true, message: "Erro ao atualizar saída!", severity: "error" }));
   };
 
-  // Função para deletar saída
+  // Exclui saídas selecionadas
   const handleDeleteDispatch = () => {
     if (selected.length === 0) return;
     Promise.all(selected.map(id => axios.delete(`/saidas/${id}`)))
@@ -513,12 +475,14 @@ export default function TelaSaidas() {
       });
   };
 
+  // Ordenação da tabela
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  // Seleciona todos os itens da página
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = filteredRows.map((n) => n.id);
@@ -528,6 +492,7 @@ export default function TelaSaidas() {
     setSelected([]);
   };
 
+  // Seleciona/desseleciona um item
   const handleClick = (event, id) => {
     setSelected((prevSelected) =>
       prevSelected.includes(id)
@@ -536,13 +501,16 @@ export default function TelaSaidas() {
     );
   };
 
+  // Paginação
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // Verifica se item está selecionado
   const isSelected = (id) => selected.indexOf(id) !== -1;
+  // Linhas vazias para preencher a tabela
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
@@ -559,6 +527,7 @@ export default function TelaSaidas() {
           marginTop: 7,
         }}
       >
+        {/* Barra de ferramentas */}
         <EnhancedTableToolbar
           numSelected={selected.length}
           filter={filter}
@@ -571,6 +540,7 @@ export default function TelaSaidas() {
           handleEdit={handleEdit}
           selected={selected}
         />
+        {/* Tabela de saídas */}
         <TableContainer sx={{ minHeight: 600, overflowX: "auto" }}>
           <Table
             sx={{ minWidth: 1000 }}
@@ -655,6 +625,7 @@ export default function TelaSaidas() {
             </TableBody>
           </Table>
         </TableContainer>
+        {/* Paginação */}
         <TablePagination
           rowsPerPageOptions={[10, 25]}
           component="div"
@@ -665,6 +636,7 @@ export default function TelaSaidas() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      {/* Snackbar de feedback */}
       <Snackbar
       open={snackbar.open}
       autoHideDuration={3000}
@@ -678,6 +650,7 @@ export default function TelaSaidas() {
       </Alert>
     </Snackbar>
 
+    {/* Diálogo de edição de saída */}
     <Dialog
         open={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
@@ -704,6 +677,7 @@ export default function TelaSaidas() {
       >
       <DialogTitle>Editar Saída</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", width: 600, gap: 3 }}>
+        {/* Campos do formulário de edição */}
         <TextField
           autoFocus
           required
