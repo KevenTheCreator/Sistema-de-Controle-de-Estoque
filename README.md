@@ -15,10 +15,10 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java**
+- **Java (JDK 21)**
 - **Spring Boot**
-- **PostgreSQL**
-- **React.js**
+- **PostgreSQL (17.4)**
+- **React.js (REACT 19)**
 - **Material UI**
 
 ---
@@ -27,7 +27,7 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
 
 1. Crie uma pasta vazia com um nome desejado
 
-2. vá em code [botão azul] no repositório e copie o link para clonagem
+2. vá em code no repositório do github e copie o link para clonagem
 
 3. Após isso, rode o seguinte comando na sua pasta criada: 
    ```bash
@@ -35,9 +35,9 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
 
 4. Com isso, o repositório estará clonado.
 
-### Back-end
+### ⚙️ Back-end
 
-1. Acesse a pasta do back-end:
+1. Acesse a pasta do back-end:   
    ```bash
    cd back-end/
      
@@ -47,14 +47,14 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
    ```bash
     ./mvnw spring-boot:run
 
-### Front-end
+### 🖼️ Front-end
 
 1. Acesse a pasta do frontend:
    ```bash
    cd front-end/
 
 2. Instale as dependências:
-   ```bash
+   ```bash 
    npm install
 
 3. rode a aplicação:
@@ -63,15 +63,11 @@ Este é um sistema para **gestão de estoque**, desenvolvido para permitir o con
 
 ---
 
-👥 Autores
+## 👥 Autores
 
-    Keven Santos
-
-    Tácio Nery
-
-    Matheus Gabriel
-
-    Tayllon Dias
+<a href="https://github.com/keventhecreator/sistema-de-controle-de-estoque/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=keventhecreator/sistema-de-controle-de-estoque" />
+</a>
 
 
 
