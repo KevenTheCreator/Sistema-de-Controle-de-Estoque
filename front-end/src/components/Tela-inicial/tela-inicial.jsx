@@ -8,8 +8,30 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import { Link } from 'react-router-dom';
 import './tela-inicial.css';
+import axios from '../../api/axiosConfig';
 
 export default function TelaInicial() {
+    const [custoTotal, setCustoTotal] = React.useState(0);
+    const [quantidadeTotal, setQuantidadeTotal] = React.useState(0);
+    const [produtosBaixoEstoque, setProdutosBaixoEstoque] = React.useState(0);
+
+ React.useEffect(() => {
+  axios.get("/entradas")
+    .then(response => {
+      const entradas = response.data;
+      const total = entradas.reduce((acc, entrada) => acc + (entrada.valorTotal || 0), 0);
+      const quantidade = entradas.reduce((acc, entrada) => acc + (entrada.quantidadeRecebida || 0), 0);
+      const produtosBaixo = entradas.filter(e => e.quantidadeRecebida < 10).length;
+      setCustoTotal(total);
+      setQuantidadeTotal(quantidade);
+      setProdutosBaixoEstoque(produtosBaixo);
+    })
+    .catch(() => {
+      setCustoTotal(0);
+      setQuantidadeTotal(0);
+      setProdutosBaixoEstoque(0);
+    });
+}, []);
   return (
     <Box
       display="flex"
@@ -38,7 +60,9 @@ export default function TelaInicial() {
       >
         <WarningIcon sx={{ fontSize: 70, color: "red" }} />
         <h3 className="cardP">PRODUTOS COM ESTOQUE BAIXO</h3>
-        <h3 style={{ color: 'black' }}>0</h3>
+        <h3 style={{ color: 'black' }}>
+          {produtosBaixoEstoque}
+        </h3>
       </Box>
 
       <Box
@@ -60,7 +84,9 @@ export default function TelaInicial() {
       >
         <AssignmentIcon sx={{ className: "card-estoque", fontSize: 70, color: "green" }} />
         <h3 className="cardQ">QUANTIDADE DE PRODUTOS NO ESTOQUE</h3>
-        <h3 style={{ color: 'black' }}>0</h3>
+        <h3 style={{ color: 'black' }}>
+          {quantidadeTotal}
+        </h3>
       </Box>
 
       <Box
@@ -82,7 +108,9 @@ export default function TelaInicial() {
       >
         <AttachMoneyIcon sx={{ className: "card-estoque", fontSize: 70, color: "blue" }} />
         <h3 className="cardC">CUSTO TOTAL DE PRODUTOS DO ESTOQUE</h3>
-        <h3 style={{ color: 'black' }}>0</h3>
+        <h3 style={{ color: 'black' }}>
+            {custoTotal.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+        </h3>
       </Box>
 
       <Box
