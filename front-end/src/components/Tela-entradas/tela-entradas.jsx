@@ -451,6 +451,14 @@ export default function TelaEntrada() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+     // Verificação de nota fiscal duplicada
+    const notaFiscal = data.get("nota-fiscal");
+    const notaDuplicada = rows.some(row => row.notaFiscal === notaFiscal);
+      if (notaDuplicada) {
+        setSnackbar({ open: true, message: "Já existe uma entrada com essa nota fiscal!", severity: "error" });
+        return;
+      }
+
     const quantidade = Number(data.get("quantidade-recebida"));
     const preco = Number(data.get("preco-unitario"));
     const valorTotalCalculado = quantidade * preco;
